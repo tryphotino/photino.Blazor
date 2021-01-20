@@ -1,0 +1,5 @@
+C:\Users\ottod\Source\Repos\Photino.Blazor\Photino.Blazor\obj\Debug\net5.0\Photino.Blazor.csprojAssemblyReference.cache
+C:\Users\ottod\Source\Repos\Photino.Blazor\Photino.Blazor\obj\Debug\net5.0\Photino.Blazor.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ottod\Source\Repos\Photino.Blazor\Photino.Blazor\obj\Debug\net5.0\Photino.Blazor.AssemblyInfoInputs.cache
+C:\Users\ottod\Source\Repos\Photino.Blazor\Photino.Blazor\obj\Debug\net5.0\Photino.Blazor.AssemblyInfo.cs
+C:\Users\ottod\Source\Repos\Photino.Blazor\Photino.Blazor\obj\Debug\net5.0\Photino.Blazor.csproj.CoreCompileInputs.cache
