@@ -1,4 +1,4 @@
-# Build Photino.NET project from dev branch in GitHub
+# Build Photino.Blazor project from dev branch in GitHub
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
@@ -38,15 +38,15 @@ jobs:
     #    script: 'dotnet nuget list source'
 
     - task: CmdLine@2
-      displayName: 'Build Photino.NET'
+      displayName: 'Build Photino.Blazor'
       inputs:
-        script: 'dotnet build Photino.NET/Photino.NET.csproj -c $(buildConfiguration)'
+        script: 'dotnet build Photino.Blazor/Photino.Blazor.csproj -c $(buildConfiguration)'
 
     #Create NuGet package
     - task: CmdLine@2
       displayName: 'Create NuGet package'
       inputs:
-        script: 'nuget.exe pack Photino.NET/Photino.NET.nuspec -Version $(versionprefix)-$(Build.BuildNumber) -NonInteractive -Properties version=$(versionprefix)-$(Build.BuildNumber)'
+        script: 'nuget.exe pack Photino.Blazor/Photino.Blazor.nuspec -Version $(versionprefix)-$(Build.BuildNumber) -NonInteractive -Properties version=$(versionprefix)-$(Build.BuildNumber)'
 
     #Publish NuGet package to Artifacts
     - task: NuGetCommand@2
