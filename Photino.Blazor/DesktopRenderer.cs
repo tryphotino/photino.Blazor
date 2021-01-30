@@ -9,7 +9,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     // Many aspects of the layering here are not what we really want, but it won't affect
     // people prototyping applications with it. We can put more work into restructuring the

@@ -1,11 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "7BkUA0l0ZUsy4tSC/RHU3R91i9qLf09TOx8EguNbtqcbgeQnY46jv/y3622poXS4iTDPsw/MJD5yGy1bvA79Hg==",
+  "dgSpecHash": "beg+uSOP9eV4BpRhkJTYSX46ZybWOgvS5lBMIvr4RFLqcDxt9QcwxIcpszy+YPJdxUtmeF9B4z+HpdJqqlvAKA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\ottod\\Source\\Repos\\Photino.Blazor\\Photino.Blazor.JS\\Photino.Blazor.JS.csproj",
+  "projectFilePath": "C:\\TFS\\Repos\\Photino\\photino.Blazor\\Photino.Blazor.JS\\Photino.Blazor.JS.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\ottod\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
-    "C:\\Users\\ottod\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
   ],
   "logs": []
 }

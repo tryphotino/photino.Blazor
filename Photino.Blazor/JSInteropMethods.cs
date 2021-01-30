@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components.RenderTree;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     public static class JSInteropMethods
     {

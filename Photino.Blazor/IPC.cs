@@ -1,31 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
-using WebWindows;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     internal class IPC
     {
         private readonly Dictionary<string, List<Action<object>>> _registrations = new Dictionary<string, List<Action<object>>>();
-        private readonly WebWindow _webWindow;
+        private readonly PhotinoNET.PhotinoNET _photinoNET;
 
-        public IPC(WebWindow webWindow)
+        public IPC(PhotinoNET.PhotinoNET photinoNET)
         {
-            _webWindow = webWindow ?? throw new ArgumentNullException(nameof(webWindow));
-            _webWindow.OnWebMessageReceived += HandleScriptNotify;
+            _photinoNET = photinoNET ?? throw new ArgumentNullException(nameof(photinoNET));
+            _photinoNET.OnWebMessageReceived += HandleScriptNotify;
         }
 
         public void Send(string eventName, params object[] args)
         {
             try
             {
-                _webWindow.Invoke(() =>
+                _photinoNET.Invoke(() =>
                 {
-                    _webWindow.SendMessage($"{eventName}:{JsonSerializer.Serialize(args)}");
+                    _photinoNET.SendMessage($"{eventName}:{JsonSerializer.Serialize(args)}");
                 });
             }
             catch (Exception ex)

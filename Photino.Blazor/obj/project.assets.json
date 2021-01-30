@@ -304,27 +304,18 @@
           "lib/net5.0/Microsoft.JSInterop.dll": {}
         }
       },
-      "System.IO.Pipelines/5.0.1": {
-        "type": "package",
-        "compile": {
-          "ref/netcoreapp2.0/System.IO.Pipelines.dll": {}
-        },
-        "runtime": {
-          "lib/netcoreapp3.0/System.IO.Pipelines.dll": {}
-        }
-      },
-      "WEST.Native/0.1.0-20210102.4": {
+      "Photino.Native/0.1.0-20210130.1": {
         "type": "package",
         "runtimeTargets": {
-          "runtimes/linux-x64/native/WEST.Native.so": {
+          "runtimes/linux-x64/native/Photino.Native.so": {
             "assetType": "native",
             "rid": "linux-x64"
           },
-          "runtimes/osx-x64/native/WEST.Native.dylib": {
+          "runtimes/osx-x64/native/Photino.Native.dylib": {
             "assetType": "native",
             "rid": "osx-x64"
           },
-          "runtimes/win-x64/native/WEST.Native.dll": {
+          "runtimes/win-x64/native/Photino.Native.dll": {
             "assetType": "native",
             "rid": "win-x64"
           },
@@ -334,16 +325,25 @@
           }
         }
       },
-      "WEST.NET/0.1.2-dev": {
+      "Photino.NET/0.1.0-20210130.14": {
         "type": "package",
         "dependencies": {
-          "WEST.Native": "0.1.0-20210102.4"
+          "Photino.Native": "0.1.0-20210130.1"
         },
         "compile": {
-          "lib/netstandard2.1/WebWindow.dll": {}
+          "lib/netstandard2.1/Photino.NET.dll": {}
         },
         "runtime": {
-          "lib/netstandard2.1/WebWindow.dll": {}
+          "lib/netstandard2.1/Photino.NET.dll": {}
+        }
+      },
+      "System.IO.Pipelines/5.0.1": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.0/System.IO.Pipelines.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/System.IO.Pipelines.dll": {}
         }
       }
     }
@@ -817,6 +817,31 @@
         "microsoft.jsinterop.nuspec"
       ]
     },
+    "Photino.Native/0.1.0-20210130.1": {
+      "sha512": "v/YVYdsdk+IiFxxg8ZqsH4DhFNEJX4LXs0lGkGbYLNc5psoords5CTzq8AVova93tFyGzvcc2hc4k4Ir3xX9qw==",
+      "type": "package",
+      "path": "photino.native/0.1.0-20210130.1",
+      "files": [
+        ".nupkg.metadata",
+        "photino.native.0.1.0-20210130.1.nupkg.sha512",
+        "photino.native.nuspec",
+        "runtimes/linux-x64/native/Photino.Native.so",
+        "runtimes/osx-x64/native/Photino.Native.dylib",
+        "runtimes/win-x64/native/Photino.Native.dll",
+        "runtimes/win-x64/native/WebView2Loader.dll"
+      ]
+    },
+    "Photino.NET/0.1.0-20210130.14": {
+      "sha512": "MbhsnBOoJgG0vWmp6FShoQlZ92qrWhVFpq472IM3N04Tu13UY+MWr9Zz4NXOByEpeSLQUJxQ/ce9xOhe6Lt70A==",
+      "type": "package",
+      "path": "photino.net/0.1.0-20210130.14",
+      "files": [
+        ".nupkg.metadata",
+        "lib/netstandard2.1/Photino.NET.dll",
+        "photino.net.0.1.0-20210130.14.nupkg.sha512",
+        "photino.net.nuspec"
+      ]
+    },
     "System.IO.Pipelines/5.0.1": {
       "sha512": "qEePWsaq9LoEEIqhbGe6D5J8c9IqQOUuTzzV6wn1POlfdLkJliZY3OlB0j0f17uMWlqZYjH7txj+2YbyrIA8Yg==",
       "type": "package",
@@ -842,31 +867,6 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
-    },
-    "WEST.Native/0.1.0-20210102.4": {
-      "sha512": "JJkuZpAZYymcNwKa34yGitC5Gjfy8al4hrKVaYBKPzEf0Jsx/Nqxbq4ZzX7w4zrN2lLGm74fNqNFwRk21v5jHA==",
-      "type": "package",
-      "path": "west.native/0.1.0-20210102.4",
-      "files": [
-        ".nupkg.metadata",
-        "runtimes/linux-x64/native/WEST.Native.so",
-        "runtimes/osx-x64/native/WEST.Native.dylib",
-        "runtimes/win-x64/native/WEST.Native.dll",
-        "runtimes/win-x64/native/WebView2Loader.dll",
-        "west.native.0.1.0-20210102.4.nupkg.sha512",
-        "west.native.nuspec"
-      ]
-    },
-    "WEST.NET/0.1.2-dev": {
-      "sha512": "319sb9j5qGhjEnrLghi2zp3wpS3dqK/teicte/B+rjQ/yxpFSMZd4SFnL55I1Wjxl26txRgs8n6ZFKxGokNWWQ==",
-      "type": "package",
-      "path": "west.net/0.1.2-dev",
-      "files": [
-        ".nupkg.metadata",
-        "lib/netstandard2.1/WebWindow.dll",
-        "west.net.0.1.2-dev.nupkg.sha512",
-        "west.net.nuspec"
-      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -877,27 +877,27 @@
       "Microsoft.Extensions.Configuration.Json >= 5.0.0",
       "Microsoft.Extensions.Logging.Console >= 5.0.0",
       "Microsoft.JSInterop >= 5.0.2",
-      "WEST.NET >= 0.1.2-dev"
+      "Photino.NET >= 0.1.0-20210130.14"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\ottod\\.nuget\\packages\\": {},
+    "C:\\Users\\myeag\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ottod\\Source\\Repos\\Photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj",
+      "projectUniqueName": "C:\\TFS\\Repos\\Photino\\photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj",
       "projectName": "Photino.Blazor",
-      "projectPath": "C:\\Users\\ottod\\Source\\Repos\\Photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj",
-      "packagesPath": "C:\\Users\\ottod\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ottod\\Source\\Repos\\Photino.Blazor\\Photino.Blazor\\obj\\",
+      "projectPath": "C:\\TFS\\Repos\\Photino\\photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj",
+      "packagesPath": "C:\\Users\\myeag\\.nuget\\packages\\",
+      "outputPath": "C:\\TFS\\Repos\\Photino\\photino.Blazor\\Photino.Blazor\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\ottod\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\myeag\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -905,9 +905,9 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Users\\ottod\\Desktop\\NUGETS": {},
         "https://api.nuget.org/v3/index.json": {},
-        "https://pkgs.dev.azure.com/eps-software/25138a24-91f3-4071-b9bd-4d7763ecb75f/_packaging/WESTPackages/nuget/v3/index.json": {}
+        "https://pkgs.dev.azure.com/eps-software/_packaging/EPSPackages/nuget/v3/index.json": {},
+        "https://pkgs.dev.azure.com/tryphotino/Photino.Native/_packaging/PhotinoPackages/nuget/v3/index.json": {}
       },
       "frameworks": {
         "net5.0": {
@@ -949,9 +949,9 @@
             "target": "Package",
             "version": "[5.0.2, )"
           },
-          "WEST.NET": {
+          "Photino.NET": {
             "target": "Package",
-            "version": "[0.1.2-dev, )"
+            "version": "[0.1.0-20210130.14, )"
           }
         },
         "imports": [
@@ -969,7 +969,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }

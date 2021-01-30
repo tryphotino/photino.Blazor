@@ -3,7 +3,7 @@ using Microsoft.JSInterop.Infrastructure;
 using System;
 using System.Threading.Tasks;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     internal class DesktopJSRuntime : JSRuntime
     {

@@ -13,7 +13,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     public static class ComponentsDesktop
     {
@@ -21,7 +21,7 @@ namespace WebWindows.Blazor
         internal static string BaseUriAbsolute { get; private set; }
         internal static DesktopJSRuntime DesktopJSRuntime { get; private set; }
         internal static DesktopRenderer DesktopRenderer { get; private set; }
-        internal static WebWindow WebWindow { get; private set; }
+        internal static PhotinoNET.PhotinoNET photinoNET { get; private set; }
 
         public static void Run<TStartup>(string windowTitle, string hostHtmlPath, bool fullscreen = false, int x = 0, int y = 0, int width = 800, int height = 600)
         {
@@ -30,7 +30,7 @@ namespace WebWindows.Blazor
                 UnhandledException(exception);
             };
 
-            WebWindow = new WebWindow(windowTitle, options =>
+            photinoNET = new PhotinoNET.PhotinoNET(windowTitle, options =>
             {
                 var contentRootAbsolute = Path.GetDirectoryName(Path.GetFullPath(hostHtmlPath));
 
@@ -61,7 +61,7 @@ namespace WebWindows.Blazor
             {
                 try
                 {
-                    var ipc = new IPC(WebWindow);
+                    var ipc = new IPC(photinoNET);
                     await RunAsync<TStartup>(ipc, appLifetimeCts.Token);
                 }
                 catch (Exception ex)
@@ -73,8 +73,8 @@ namespace WebWindows.Blazor
 
             try
             {
-                WebWindow.NavigateToUrl(BlazorAppScheme + "://app/");
-                WebWindow.WaitForExit();
+                photinoNET.NavigateToUrl(BlazorAppScheme + "://app/");
+                photinoNET.WaitForExit();
             }
             finally
             {
@@ -112,7 +112,7 @@ namespace WebWindows.Blazor
 
         private static void UnhandledException(Exception ex)
         {
-            WebWindow.ShowMessage("Error", $"{ex.Message}\n{ex.StackTrace}");
+            photinoNET.ShowMessage("Error", $"{ex.Message}\n{ex.StackTrace}");
         }
 
         private static async Task RunAsync<TStartup>(IPC ipc, CancellationToken appLifetime)
@@ -131,7 +131,7 @@ namespace WebWindows.Blazor
             serviceCollection.AddSingleton<NavigationManager>(DesktopNavigationManager.Instance);
             serviceCollection.AddSingleton<IJSRuntime>(DesktopJSRuntime);
             serviceCollection.AddSingleton<INavigationInterception, DesktopNavigationInterception>();
-            serviceCollection.AddSingleton(WebWindow);
+            serviceCollection.AddSingleton(photinoNET);
 
             var startup = new ConventionBasedStartup(Activator.CreateInstance(typeof(TStartup)));
             startup.ConfigureServices(serviceCollection);
@@ -159,7 +159,7 @@ namespace WebWindows.Blazor
             switch (uri)
             {
                 case "framework://blazor.desktop.js":
-                    return typeof(ComponentsDesktop).Assembly.GetManifestResourceStream("WebWindow.Blazor.blazor.desktop.js");
+                    return typeof(ComponentsDesktop).Assembly.GetManifestResourceStream("photinoNET.Blazor.blazor.desktop.js");
                 default:
                     throw new ArgumentException($"Unknown framework file: {uri}");
             }

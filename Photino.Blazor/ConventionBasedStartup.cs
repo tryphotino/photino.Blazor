@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     internal class ConventionBasedStartup
     {

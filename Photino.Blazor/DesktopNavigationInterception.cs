@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.Routing;
 using System.Threading.Tasks;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     internal class DesktopNavigationInterception : INavigationInterception
     {

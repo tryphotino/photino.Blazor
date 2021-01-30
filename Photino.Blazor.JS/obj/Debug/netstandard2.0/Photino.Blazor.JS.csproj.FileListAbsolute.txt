@@ -1,0 +1,8 @@
+C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\bin\Debug\netstandard2.0\Photino.Blazor.JS.deps.json
+C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\bin\Debug\netstandard2.0\Photino.Blazor.JS.dll
+C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\bin\Debug\netstandard2.0\Photino.Blazor.JS.pdb
+C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\obj\Debug\netstandard2.0\Photino.Blazor.JS.AssemblyInfoInputs.cache
+C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\obj\Debug\netstandard2.0\Photino.Blazor.JS.AssemblyInfo.cs
+C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\obj\Debug\netstandard2.0\Photino.Blazor.JS.csproj.CoreCompileInputs.cache
+C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\obj\Debug\netstandard2.0\Photino.Blazor.JS.dll
+C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\obj\Debug\netstandard2.0\Photino.Blazor.JS.pdb

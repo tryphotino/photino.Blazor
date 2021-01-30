@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ottod\\Source\\Repos\\Photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj": {}
+    "C:\\TFS\\Repos\\Photino\\photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ottod\\Source\\Repos\\Photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj": {
+    "C:\\TFS\\Repos\\Photino\\photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ottod\\Source\\Repos\\Photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj",
+        "projectUniqueName": "C:\\TFS\\Repos\\Photino\\photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj",
         "projectName": "Photino.Blazor",
-        "projectPath": "C:\\Users\\ottod\\Source\\Repos\\Photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj",
-        "packagesPath": "C:\\Users\\ottod\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ottod\\Source\\Repos\\Photino.Blazor\\Photino.Blazor\\obj\\",
+        "projectPath": "C:\\TFS\\Repos\\Photino\\photino.Blazor\\Photino.Blazor\\Photino.Blazor.csproj",
+        "packagesPath": "C:\\Users\\myeag\\.nuget\\packages\\",
+        "outputPath": "C:\\TFS\\Repos\\Photino\\photino.Blazor\\Photino.Blazor\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\ottod\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\myeag\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -25,9 +25,9 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Users\\ottod\\Desktop\\NUGETS": {},
           "https://api.nuget.org/v3/index.json": {},
-          "https://pkgs.dev.azure.com/eps-software/25138a24-91f3-4071-b9bd-4d7763ecb75f/_packaging/WESTPackages/nuget/v3/index.json": {}
+          "https://pkgs.dev.azure.com/eps-software/_packaging/EPSPackages/nuget/v3/index.json": {},
+          "https://pkgs.dev.azure.com/tryphotino/Photino.Native/_packaging/PhotinoPackages/nuget/v3/index.json": {}
         },
         "frameworks": {
           "net5.0": {
@@ -69,9 +69,9 @@
               "target": "Package",
               "version": "[5.0.2, )"
             },
-            "WEST.NET": {
+            "Photino.NET": {
               "target": "Package",
-              "version": "[0.1.2-dev, )"
+              "version": "[0.1.0-20210130.14, )"
             }
           },
           "imports": [
@@ -89,7 +89,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
         }
       }
     }

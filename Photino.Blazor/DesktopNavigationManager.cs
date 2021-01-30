@@ -1,7 +1,7 @@
-﻿using Microsoft.JSInterop;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     internal class DesktopNavigationManager : NavigationManager
     {

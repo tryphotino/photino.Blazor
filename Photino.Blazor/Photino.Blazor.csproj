@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="Microsoft.JSInterop" Version="5.0.2" />
-    <PackageReference Include="WEST.NET" Version="0.1.2-dev" />
+    <PackageReference Include="Photino.NET" Version="0.1.0-20210130.14" />
   </ItemGroup>
 
 </Project>

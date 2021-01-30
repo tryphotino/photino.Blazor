@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     public class DesktopApplicationBuilder
     {

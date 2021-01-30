@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     internal class DesktopSynchronizationContext : SynchronizationContext
     {

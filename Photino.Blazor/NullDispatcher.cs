@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Components;
+using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components;
 
-namespace WebWindows.Blazor
+namespace Photino.Blazor
 {
     internal class NullDispatcher : Dispatcher
     {
