@@ -6,3 +6,4 @@ C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\obj\Debug\netstandard2.0\P
 C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\obj\Debug\netstandard2.0\Photino.Blazor.JS.csproj.CoreCompileInputs.cache
 C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\obj\Debug\netstandard2.0\Photino.Blazor.JS.dll
 C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\obj\Debug\netstandard2.0\Photino.Blazor.JS.pdb
+C:\TFS\Repos\Photino\photino.Blazor\Photino.Blazor.JS\obj\Debug\netstandard2.0\Photino.Blazor.JS.csprojAssemblyReference.cache
