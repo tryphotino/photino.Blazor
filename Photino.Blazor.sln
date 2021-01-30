@@ -10,7 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3CF0D9AA-E982-4D0D-8A6D-90D42B74E6CE}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		azure-pipelines-photino.blzor-dev.yml = azure-pipelines-photino.blzor-dev.yml
+		azure-pipelines-photino.blazor-dev.yml = azure-pipelines-photino.blazor-dev.yml
 	EndProjectSection
 EndProject
 Global
