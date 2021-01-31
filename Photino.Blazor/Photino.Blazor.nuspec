@@ -11,6 +11,6 @@
     <description>.NET 5 app that opens native OS windows hosting Blazor on Windows, Mac, and Linux</description>
   </metadata>
   <files>
-    <file src="bin/$configuration$/net5.0/Photino.Blazor.dll" target="lib/net5.0" />
+    <file src="bin/Release/net5.0/Photino.Blazor.dll" target="lib/net5.0" />
   </files>
 </package>
