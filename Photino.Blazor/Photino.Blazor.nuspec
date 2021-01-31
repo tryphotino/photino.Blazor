@@ -7,7 +7,7 @@
     <authors>TryPhotino</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">Apache-2.0</license>
-    <projectUrl>https://github.com/tryphotino/photino.NET</projectUrl>
+    <projectUrl>https://github.com/tryphotino/photino.Blazor</projectUrl>
     <description>.NET 5 app that opens native OS windows hosting Blazor on Windows, Mac, and Linux</description>
   </metadata>
   <files>
