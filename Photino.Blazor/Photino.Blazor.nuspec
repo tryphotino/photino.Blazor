@@ -9,11 +9,6 @@
     <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/tryphotino/photino.NET</projectUrl>
     <description>.NET 5 app that opens native OS windows hosting Blazor on Windows, Mac, and Linux</description>
-    <dependencies>
-      <group targetFramework=".NETStandard2.1">
-        <dependency id="Photino.Native" version="0.1.0-20210130.1" exclude="Build,Analyzers" />
-      </group>
-    </dependencies>
   </metadata>
   <files>
     <file src="bin/$configuration$/net5.0/Photino.Blazor.dll" target="lib/net5.0" />
