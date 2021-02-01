@@ -338,3 +338,4 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+/Photino.Blazor.JS/dist/blazor.desktop.js
