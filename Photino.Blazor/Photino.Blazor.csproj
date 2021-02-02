@@ -31,4 +31,8 @@
     <PackageReference Include="Photino.NET" Version="0.9.0-dev-20210201.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Photino.Blazor.JS\Photino.Blazor.JS.csproj" />
+  </ItemGroup>
+
 </Project>
