@@ -29,10 +29,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="Microsoft.JSInterop" Version="5.0.2" />
     <PackageReference Include="Photino.NET" Version="0.9.0-dev-20210201.8" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Photino.Blazor.JS\Photino.Blazor.JS.csproj" />
+    <EmbeddedResource Include="../Photino.Blazor.JS/dist/blazor.desktop.js" />
   </ItemGroup>
 
 </Project>
