@@ -36,7 +36,13 @@ jobs:
     - task: CmdLine@2
       displayName: 'Build desktop.blazor.js'
       inputs:
-        script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj
+        script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
+
+    #Does the file exist?
+    - task: CmdLine@2
+      displayName: 'list webpack output'
+      inputs:
+        script: dir /s desktop.blazor.js
 
     #Build and Create NuGet package
     - task: CmdLine@2
