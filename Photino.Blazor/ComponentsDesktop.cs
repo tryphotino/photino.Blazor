@@ -159,7 +159,7 @@ namespace Photino.Blazor
             switch (uri)
             {
                 case "framework://blazor.desktop.js":
-                    return typeof(ComponentsDesktop).Assembly.GetManifestResourceStream("photinoNET.Blazor.blazor.desktop.js");
+                    return typeof(ComponentsDesktop).Assembly.GetManifestResourceStream("Photino.Blazor.blazor.desktop.js");
                 default:
                     throw new ArgumentException($"Unknown framework file: {uri}");
             }
