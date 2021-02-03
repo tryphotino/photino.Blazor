@@ -38,33 +38,33 @@ jobs:
       inputs:
         script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
 
-    #What is the current folder?
-    - task: CmdLine@2
-      displayName: 'Current Folder'
-      inputs:
-       script: chdir
+    ##What is the current folder?
+    #- task: CmdLine@2
+    #  displayName: 'Current Folder'
+    #  inputs:
+    #   script: chdir
        
-    # Script for Windows - outut folder structure to 
-    - powershell: |
-        $SEARCH_PATH=$Env:Path
-        Write-Host "##[debug] Found directories"
-        ForEach ($Dir in $SEARCH_PATH -split ";") {
-          Write-Host "$Dir"
-        }
-        Write-Host ""
-        Write-Host ""
-        Write-Host "##[debug] Found files"
-        ForEach ($Dir in $SEARCH_PATH -split ";") {
-          Get-ChildItem $Dir -File -ErrorAction Continue | ForEach-Object -Process {
-            Write-Host $_.FullName
-          }
-        }
+    ## Script for Windows - outut folder structure to 
+    #- powershell: |
+    #    $SEARCH_PATH=$Env:Path
+    #    Write-Host "##[debug] Found directories"
+    #    ForEach ($Dir in $SEARCH_PATH -split ";") {
+    #      Write-Host "$Dir"
+    #    }
+    #    Write-Host ""
+    #    Write-Host ""
+    #    Write-Host "##[debug] Found files"
+    #    ForEach ($Dir in $SEARCH_PATH -split ";") {
+    #      Get-ChildItem $Dir -File -ErrorAction Continue | ForEach-Object -Process {
+    #        Write-Host $_.FullName
+    #      }
+    #    }
 
-    #Does the file exist?
-    - task: CmdLine@2
-      displayName: 'list webpack output'
-      inputs:
-        script: dir /s blazor.desktop.js
+    ##Does the file exist?
+    #- task: CmdLine@2
+    #  displayName: 'list webpack output'
+    #  inputs:
+    #    script: dir /s blazor.desktop.js
 
     #Build and Create NuGet package
     - task: CmdLine@2
