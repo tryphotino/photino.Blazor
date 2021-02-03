@@ -42,7 +42,7 @@ jobs:
     - task: CmdLine@2
       displayName: 'list webpack output'
       inputs:
-        script: dir /s desktop.blazor.js
+        script: dir /s blazor.desktop.js
 
     #Build and Create NuGet package
     - task: CmdLine@2
