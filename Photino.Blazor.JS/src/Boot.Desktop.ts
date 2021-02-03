@@ -8,9 +8,9 @@ import { decode } from 'base64-arraybuffer';
 import * as ipc from './IPC';
 
 function boot() {
-  setEventDispatcher((eventDescriptor, eventArgs) => DotNet.invokeMethodAsync('photinoNET.Blazor', 'DispatchEvent', eventDescriptor, JSON.stringify(eventArgs)));
+  setEventDispatcher((eventDescriptor, eventArgs) => DotNet.invokeMethodAsync('Photino.Blazor', 'DispatchEvent', eventDescriptor, JSON.stringify(eventArgs)));
   navigationManagerFunctions.listenForNavigationEvents((uri: string, intercepted: boolean) => {
-    return DotNet.invokeMethodAsync('photinoNET.Blazor', 'NotifyLocationChanged', uri, intercepted);
+    return DotNet.invokeMethodAsync('Photino.Blazor', 'NotifyLocationChanged', uri, intercepted);
   });
 
   // Configure the mechanism for JS<->NET calls
