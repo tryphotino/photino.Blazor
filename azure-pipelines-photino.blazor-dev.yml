@@ -2,7 +2,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- dev
+- debug
 
 variables:
   versionprefix: 0.9.0
@@ -38,34 +38,6 @@ jobs:
       inputs:
         script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
 
-    ##What is the current folder?
-    #- task: CmdLine@2
-    #  displayName: 'Current Folder'
-    #  inputs:
-    #   script: chdir
-       
-    ## Script for Windows - outut folder structure to 
-    #- powershell: |
-    #    $SEARCH_PATH=$Env:Path
-    #    Write-Host "##[debug] Found directories"
-    #    ForEach ($Dir in $SEARCH_PATH -split ";") {
-    #      Write-Host "$Dir"
-    #    }
-    #    Write-Host ""
-    #    Write-Host ""
-    #    Write-Host "##[debug] Found files"
-    #    ForEach ($Dir in $SEARCH_PATH -split ";") {
-    #      Get-ChildItem $Dir -File -ErrorAction Continue | ForEach-Object -Process {
-    #        Write-Host $_.FullName
-    #      }
-    #    }
-
-    ##Does the file exist?
-    #- task: CmdLine@2
-    #  displayName: 'list webpack output'
-    #  inputs:
-    #    script: dir /s blazor.desktop.js
-
     #Build and Create NuGet package
     - task: CmdLine@2
       displayName: 'Build and Create NuGet package'
@@ -82,25 +54,3 @@ jobs:
         packagesToPush: 'Photino.Blazor/bin/$(buildConfiguration)/*.nupkg'
         allowPackageConflicts: true
 
-  # Uploads the NuGet package file to nuget.org
-  # Important notes:
-  # 1. For this to work, you need to create a 'service connection' with the same name
-  #    as the 'publishFeedCredentials' value.
-  # 2. For security, you *must* ensure that 'Make secrets available to builds of forks'
-  #    is disabled in your PR validation settings (inside build -> Edit -> Triggers).
-  #    Otherwise, PRs would be able to push new packages even without being merged.
-  #- job: 'PublishToNuGet'
-  #  dependsOn: 'CombinePackages'
-  #  steps:
-  #  - task: DownloadBuildArtifacts@0
-  #    inputs:
-  #      downloadPath: 'artifacts'
-  #      artifactName: 'artifacts-combined'
-  #  - task: NuGetCommand@2
-  #    displayName: 'Publish to nuget.org'
-  #    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  #    inputs:
-  #      command: push
-  #      packagesToPush: 'artifacts/artifacts-combined/*.nupkg'
-  #      nuGetFeedType: external
-  #      publishFeedCredentials: 'WebWindowNuGet'
