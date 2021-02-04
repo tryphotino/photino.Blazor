@@ -22,6 +22,10 @@
   </Target>
 
   <ItemGroup>
+    <None Remove="Photino.Blazor.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
