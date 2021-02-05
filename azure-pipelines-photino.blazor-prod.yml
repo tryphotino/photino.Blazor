@@ -34,7 +34,7 @@ jobs:
     - task: CmdLine@2
       displayName: 'Build and Create NuGet package'
       inputs:
-        script: 'dotnet pack Photino.Blazor/Photino.Blazor.csproj -c $(buildConfiguration) --include-symbols /p:Version=$(major).$(minor).$(patch) /p:PackageVersion=$(major).$(minor).$(patch)'
+        script: 'dotnet pack Photino.Blazor/Photino.Blazor.csproj -c $(buildConfiguration) /p:Version=$(major).$(minor).$(patch) /p:PackageVersion=$(major).$(minor).$(patch)'
 
   # Uploads the NuGet package file to nuget.org
   # Important notes:
