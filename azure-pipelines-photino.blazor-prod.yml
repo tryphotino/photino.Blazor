@@ -25,18 +25,16 @@ jobs:
         installationPath: $(Agent.ToolsDirectory)/dotnet
       
     #Build .JS project - create desktop.blazor.js file used in Photino.Bloazor project
-    #- task: CmdLine@2
-    #  displayName: 'Build desktop.blazor.js'
-    #  inputs:
-    #    script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
-
-    #How to update the Photino.NET NuGet package automatically?
+    - task: CmdLine@2
+      displayName: 'Build desktop.blazor.js'
+      inputs:
+        script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
 
     #Build and Create NuGet package
-    #- task: CmdLine@2
-    #  displayName: 'Build and Create NuGet package'
-    #  inputs:
-    #    script: 'dotnet pack Photino.Blazor/Photino.Blazor.csproj -c $(buildConfiguration) --include-symbols /p:Version=$(major).$(minor).$(patch) /p:PackageVersion=$(major).$(minor).$(patch)'
+    - task: CmdLine@2
+      displayName: 'Build and Create NuGet package'
+      inputs:
+        script: 'dotnet pack Photino.Blazor/Photino.Blazor.csproj -c $(buildConfiguration) --include-symbols /p:Version=$(major).$(minor).$(patch) /p:PackageVersion=$(major).$(minor).$(patch)'
 
   # Uploads the NuGet package file to nuget.org
   # Important notes:
@@ -45,11 +43,11 @@ jobs:
   # 2. For security, you *must* ensure that 'Make secrets available to builds of forks'
   #    is disabled in your PR validation settings (inside build -> Edit -> Triggers).
   #    Otherwise, PRs would be able to push new packages even without being merged.
-  #  - task: NuGetCommand@2
-  #    displayName: 'Publish to nuget.org'
-  #    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  #    inputs:
-  #      command: push
-  #      packagesToPush: 'artifacts/artifacts-combined/*.nupkg'
-  #      nuGetFeedType: external
-  #      publishFeedCredentials: 'WebWindowNuGet'
+    - task: NuGetCommand@2
+      displayName: 'Publish to nuget.org'
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      inputs:
+        command: push
+        packagesToPush: 'Photino.NET/bin/$(buildConfiguration)/*.nupkg'
+        nuGetFeedType: external
+        publishFeedCredentials: 'PhotinoNuGet'
