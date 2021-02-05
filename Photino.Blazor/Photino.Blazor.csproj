@@ -32,7 +32,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
     <PackageReference Include="Microsoft.JSInterop" Version="5.0.2" />
-    <PackageReference Include="Photino.NET" Version="0.9.0-dev-20210204.2" />
+    <PackageReference Include="Photino.NET" Version="1.0.6" />
     <EmbeddedResource Include="../Photino.Blazor.JS/dist/blazor.desktop.js" />
   </ItemGroup>
 
