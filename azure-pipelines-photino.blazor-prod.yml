@@ -2,7 +2,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
+- manual
 
 variables:
   major: 1
@@ -48,6 +48,6 @@ jobs:
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
       inputs:
         command: push
-        packagesToPush: 'Photino.NET/bin/$(buildConfiguration)/*.nupkg'
+        packagesToPush: 'Photino.Blazor/bin/$(buildConfiguration)/*.nupkg'
         nuGetFeedType: external
         publishFeedCredentials: 'PhotinoNuGet'
