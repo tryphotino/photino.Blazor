@@ -85,15 +85,7 @@ namespace Photino.Blazor
         private static string GetContentType(string url)
         {
             var ext = Path.GetExtension(url);
-            switch (ext)
-            {
-                case ".html": return "text/html";
-                case ".css": return "text/css";
-                case ".js": return "text/javascript";
-                case ".wasm": return "application/wasm";
-                case ".svg": return "image/svg+xml";
-            }
-            return "application/octet-stream";
+            return MimeTypes.GetMimeType(ext);
         }
 
         private static string BlazorAppScheme
