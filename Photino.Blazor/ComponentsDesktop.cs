@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.JSInterop;
 using Microsoft.JSInterop.Infrastructure;
+using PhotinoNET;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -21,7 +22,7 @@ namespace Photino.Blazor
         internal static string BaseUriAbsolute { get; private set; }
         internal static DesktopJSRuntime DesktopJSRuntime { get; private set; }
         internal static DesktopRenderer DesktopRenderer { get; private set; }
-        internal static PhotinoNET.PhotinoNET photinoNET { get; private set; }
+        internal static PhotinoWindow photinoWindow { get; private set; }
 
         public static void Run<TStartup>(string windowTitle, string hostHtmlPath, bool fullscreen = false, int x = 0, int y = 0, int width = 800, int height = 600)
         {
@@ -30,7 +31,7 @@ namespace Photino.Blazor
                 UnhandledException(exception);
             };
 
-            photinoNET = new PhotinoNET.PhotinoNET(windowTitle, options =>
+            photinoWindow = new PhotinoWindow(windowTitle, options =>
             {
                 var contentRootAbsolute = Path.GetDirectoryName(Path.GetFullPath(hostHtmlPath));
 
@@ -61,7 +62,7 @@ namespace Photino.Blazor
             {
                 try
                 {
-                    var ipc = new IPC(photinoNET);
+                    var ipc = new IPC(photinoWindow);
                     await RunAsync<TStartup>(ipc, appLifetimeCts.Token);
                 }
                 catch (Exception ex)
@@ -73,8 +74,8 @@ namespace Photino.Blazor
 
             try
             {
-                photinoNET.NavigateToUrl(BlazorAppScheme + "://app/");
-                photinoNET.WaitForExit();
+                photinoWindow.NavigateToUrl(BlazorAppScheme + "://app/");
+                photinoWindow.WaitForExit();
             }
             finally
             {
@@ -104,7 +105,7 @@ namespace Photino.Blazor
 
         private static void UnhandledException(Exception ex)
         {
-            photinoNET.ShowMessage("Error", $"{ex.Message}\n{ex.StackTrace}");
+            photinoWindow.ShowMessage("Error", $"{ex.Message}\n{ex.StackTrace}");
         }
 
         private static async Task RunAsync<TStartup>(IPC ipc, CancellationToken appLifetime)
@@ -123,7 +124,7 @@ namespace Photino.Blazor
             serviceCollection.AddSingleton<NavigationManager>(DesktopNavigationManager.Instance);
             serviceCollection.AddSingleton<IJSRuntime>(DesktopJSRuntime);
             serviceCollection.AddSingleton<INavigationInterception, DesktopNavigationInterception>();
-            serviceCollection.AddSingleton(photinoNET);
+            serviceCollection.AddSingleton(photinoWindow);
 
             var startup = new ConventionBasedStartup(Activator.CreateInstance(typeof(TStartup)));
             startup.ConfigureServices(serviceCollection);
