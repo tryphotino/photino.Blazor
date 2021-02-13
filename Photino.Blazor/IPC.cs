@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PhotinoNET;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -8,21 +9,21 @@ namespace Photino.Blazor
     internal class IPC
     {
         private readonly Dictionary<string, List<Action<object>>> _registrations = new Dictionary<string, List<Action<object>>>();
-        private readonly PhotinoNET.PhotinoNET _photinoNET;
+        private readonly PhotinoWindow _photinoWindow;
 
-        public IPC(PhotinoNET.PhotinoNET photinoNET)
+        public IPC(PhotinoWindow photinoWindow)
         {
-            _photinoNET = photinoNET ?? throw new ArgumentNullException(nameof(photinoNET));
-            _photinoNET.OnWebMessageReceived += HandleScriptNotify;
+            _photinoWindow = photinoWindow ?? throw new ArgumentNullException(nameof(photinoWindow));
+            _photinoWindow.OnWebMessageReceived += HandleScriptNotify;
         }
 
         public void Send(string eventName, params object[] args)
         {
             try
             {
-                _photinoNET.Invoke(() =>
+                _photinoWindow.Invoke(() =>
                 {
-                    _photinoNET.SendMessage($"{eventName}:{JsonSerializer.Serialize(args)}");
+                    _photinoWindow.SendMessage($"{eventName}:{JsonSerializer.Serialize(args)}");
                 });
             }
             catch (Exception ex)
