@@ -26,4 +26,5 @@ If you want to build this library itself, you will need:
  * Make sure the Photino.Native Nuget package is added and up to date.
  * If you're on Windows:
    * Install Microsoft Edge Dev, Beta or Canary: https://www.microsoftedgeinsider.com/en-us/download
- * If you're on Windows Subsystem for Linux (WSL), then as well as the above, you will need a local X server ![](https://tryphotino.kavadocs.com/Running-Photino-in-WSL).
+ * If you're on Windows Subsystem for Linux (WSL), then as well as the above, you will need a local X server: 
+  https://tryphotino.kavadocs.com/Running-Photino-in-WSL
