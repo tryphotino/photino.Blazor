@@ -22,7 +22,7 @@ https://www.nuget.org/packages/Photino.Blazor
 ## How to build this repo
 
 If you want to build this library itself, you will need:
- * Windows, Mac, or Linux
+ * Windows 10, Mac 10.15+, or Linux (Tested with Ubuntu 18.04+)
  * Make sure the Photino.Native Nuget package is added and up to date.
  * If you're on Windows:
    * Install Microsoft Edge Dev: https://www.microsoftedgeinsider.com/en-us/download
