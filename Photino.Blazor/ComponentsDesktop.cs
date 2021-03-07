@@ -35,7 +35,7 @@ namespace Photino.Blazor
             {
                 var contentRootAbsolute = Path.GetDirectoryName(Path.GetFullPath(hostHtmlPath));
 
-                options.SchemeHandlers.Add(BlazorAppScheme, (string url, out string contentType) =>
+                options.CustomSchemeHandlers.Add(BlazorAppScheme, (string url, out string contentType) =>
                 {
                     // TODO: Only intercept for the hostname 'app' and passthrough for others
                     // TODO: Prevent directory traversal?
@@ -50,12 +50,12 @@ namespace Photino.Blazor
                 });
 
                 // framework:// is resolved as embedded resources
-                options.SchemeHandlers.Add("framework", (string url, out string contentType) =>
+                options.CustomSchemeHandlers.Add("framework", (string url, out string contentType) =>
                 {
                     contentType = GetContentType(url);
                     return SupplyFrameworkFile(url);
                 });
-            }, fullscreen, x, y, width, height);
+            }, width, height, x, y, fullscreen);
 
             CancellationTokenSource appLifetimeCts = new CancellationTokenSource();
             Task.Factory.StartNew(async () =>
@@ -74,8 +74,8 @@ namespace Photino.Blazor
 
             try
             {
-                photinoWindow.NavigateToUrl(BlazorAppScheme + "://app/");
-                photinoWindow.WaitForExit();
+                photinoWindow.Load(BlazorAppScheme + "://app/");
+                photinoWindow.WaitForClose();
             }
             finally
             {
@@ -105,7 +105,7 @@ namespace Photino.Blazor
 
         private static void UnhandledException(Exception ex)
         {
-            photinoWindow.ShowMessage("Error", $"{ex.Message}\n{ex.StackTrace}");
+            photinoWindow.OpenAlertWindow("Error", $"{ex.Message}\n{ex.StackTrace}");
         }
 
         private static async Task RunAsync<TStartup>(IPC ipc, CancellationToken appLifetime)
