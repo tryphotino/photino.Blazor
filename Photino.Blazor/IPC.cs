@@ -14,17 +14,14 @@ namespace Photino.Blazor
         public IPC(PhotinoWindow photinoWindow)
         {
             _photinoWindow = photinoWindow ?? throw new ArgumentNullException(nameof(photinoWindow));
-            _photinoWindow.OnWebMessageReceived += HandleScriptNotify;
+            _photinoWindow.WebMessageReceived += HandleScriptNotify;
         }
 
         public void Send(string eventName, params object[] args)
         {
             try
             {
-                _photinoWindow.Invoke(() =>
-                {
-                    _photinoWindow.SendMessage($"{eventName}:{JsonSerializer.Serialize(args)}");
-                });
+                _photinoWindow.SendWebMessage($"{eventName}:{JsonSerializer.Serialize(args)}");
             }
             catch (Exception ex)
             {
