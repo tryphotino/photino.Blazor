@@ -4,19 +4,19 @@ The contents of this directory come from https://github.com/aspnet/AspNetCore re
 
 One-time setup per working copy:
 
-    git remote add -t master --no-tags aspnetcore https://github.com/aspnet/AspNetCore.git
+    git remote add -t main --no-tags aspnetcore https://github.com/aspnet/AspNetCore.git
 
 Then, to update the contents of upstream/aspnetcore/web.js to the latest:
 
     cd <directory containing this .md file>
     git rm -rf upstream/aspnetcore
     git fetch --depth 1 aspnetcore
-    git read-tree --prefix=src/Photino.Blazor.JS/upstream/aspnetcore/web.js -u aspnetcore/master:src/Components/Web.JS
+    git read-tree --prefix=Photino.Blazor.JS/upstream/aspnetcore/web.js -u aspnetcore/main:src/Components/Web.JS
     git commit -m "Get Web.JS files from commit a294d64a45f"
 
 When using these commands, replace:
 
- * `master` with the branch you want to fetch from
+ * `main` with the branch you want to fetch from
  * `a294d64a45f` with the SHA of the commit you're fetching from
 
 Longer term, we may consider publishing Components.Web.JS as a NuGet package
