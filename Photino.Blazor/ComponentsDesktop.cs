@@ -37,7 +37,8 @@ namespace Photino.Blazor
                 Title = windowTitle,
                 Width = width,
                 Height = height,
-                FullScreen = fullscreen
+                FullScreen = fullscreen,
+                StartString = "<p>Loading...</p>" // StartString or StartUrl has to be initially set
             };
             photinoWindow.SetLocation(new Point(x, y));
             
@@ -83,7 +84,8 @@ namespace Photino.Blazor
 
             try
             {
-                photinoWindow.Load(BlazorAppScheme + "://app/");
+                var blazorUri = new Uri(BlazorAppScheme + "://app/");
+                photinoWindow.Load(blazorUri);
                 photinoWindow.WaitForClose();
             }
             finally
