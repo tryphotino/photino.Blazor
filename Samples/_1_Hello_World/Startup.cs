@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
 
-namespace Photino.Blazor.Samples.HelloWorld
+namespace _1_Hello_World
 {
     public class Startup
     {

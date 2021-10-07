@@ -1,7 +1,7 @@
 ﻿using System;
 using Photino.Blazor;
 
-namespace Photino.Blazor.Samples.HelloWorld
+namespace _1_Hello_World
 {
     class Program
     {
