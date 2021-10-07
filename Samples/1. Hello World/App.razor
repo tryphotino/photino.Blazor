@@ -1,0 +1,13 @@
+<div>
+    @message
+</div>
+
+@code
+{
+    string message;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        message = "Hello World! - Photino Edition";
+    }
+}
