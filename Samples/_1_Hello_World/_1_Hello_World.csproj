@@ -4,6 +4,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
+  
+  <Import Project="$(SolutionDir)\Photino.BlazorCommon.targets" />
 
   <ItemGroup>
     <Content Update="wwwroot\**">
@@ -11,22 +13,8 @@
     </Content>
   </ItemGroup>
   
-  <!-- 
-    these package references are temporary
-    -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.3" />
-    <PackageReference Include="Photino.NET" Version="2.0.13" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
-    <PackageReference Include="Microsoft.JSInterop" Version="5.0.3" />
-    
-
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Photino.Blazor\Photino.Blazor.csproj" />
+    <ProjectReference Include="$(SolutionDir)\Photino.Blazor\Photino.Blazor.csproj" />
   </ItemGroup>
 
 </Project>
