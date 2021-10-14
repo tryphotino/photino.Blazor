@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.3" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+        <PackageReference Include="Microsoft.JSInterop" Version="5.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.3" />
+        <PackageReference Include="Photino.NET" Version="2.0.13" />
+    </ItemGroup>
+
+</Project>

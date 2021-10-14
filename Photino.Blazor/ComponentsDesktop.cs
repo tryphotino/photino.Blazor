@@ -8,6 +8,7 @@ using Microsoft.JSInterop.Infrastructure;
 using PhotinoNET;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
@@ -31,11 +32,20 @@ namespace Photino.Blazor
                 UnhandledException(exception);
             };
 
-            photinoWindow = new PhotinoWindow(windowTitle, options =>
+            photinoWindow = new PhotinoWindow()
             {
-                var contentRootAbsolute = Path.GetDirectoryName(Path.GetFullPath(hostHtmlPath));
+                Title = windowTitle,
+                Width = width,
+                Height = height,
+                FullScreen = fullscreen,
+                StartString = "<p>Loading...</p>" // StartString or StartUrl has to be initially set
+            };
+            photinoWindow.SetLocation(new Point(x, y));
+            
+            var contentRootAbsolute = Path.GetDirectoryName(Path.GetFullPath(hostHtmlPath));
 
-                options.CustomSchemeHandlers.Add(BlazorAppScheme, (string url, out string contentType) =>
+            photinoWindow.RegisterCustomSchemeHandler(BlazorAppScheme,
+                (object _sender, string _scheme, string url, out string contentType) =>
                 {
                     // TODO: Only intercept for the hostname 'app' and passthrough for others
                     // TODO: Prevent directory traversal?
@@ -49,13 +59,13 @@ namespace Photino.Blazor
                     return File.Exists(appFile) ? File.OpenRead(appFile) : null;
                 });
 
-                // framework:// is resolved as embedded resources
-                options.CustomSchemeHandlers.Add("framework", (string url, out string contentType) =>
+            // framework:// is resolved as embedded resources
+            photinoWindow.RegisterCustomSchemeHandler("framework",
+                (object _sender, string _scheme, string url, out string contentType) =>
                 {
                     contentType = GetContentType(url);
                     return SupplyFrameworkFile(url);
                 });
-            }, width, height, x, y, fullscreen);
 
             CancellationTokenSource appLifetimeCts = new CancellationTokenSource();
             Task.Factory.StartNew(async () =>
@@ -74,7 +84,8 @@ namespace Photino.Blazor
 
             try
             {
-                photinoWindow.Load(BlazorAppScheme + "://app/");
+                var blazorUri = new Uri(BlazorAppScheme + "://app/");
+                photinoWindow.Load(blazorUri);
                 photinoWindow.WaitForClose();
             }
             finally
