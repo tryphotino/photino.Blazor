@@ -31,31 +31,34 @@ namespace Photino.Blazor
                 UnhandledException(exception);
             };
 
-            photinoWindow = new PhotinoWindow(windowTitle, options =>
-            {
-                var contentRootAbsolute = Path.GetDirectoryName(Path.GetFullPath(hostHtmlPath));
+            var contentRootAbsolute = Path.GetDirectoryName(Path.GetFullPath(hostHtmlPath));
 
-                options.CustomSchemeHandlers.Add(BlazorAppScheme, (string url, out string contentType) =>
+            photinoWindow = new PhotinoWindow()
+                .SetTitle(windowTitle)
+                .SetUseOsDefaultLocation(false)
+                .SetWidth(width)
+                .SetHeight(height)
+                .SetLeft(x)
+                .SetTop(y)
+                .SetFullScreen(fullscreen)
+                .RegisterCustomSchemeHandler(BlazorAppScheme, (object sender, string scheme, string url, out string contentType) =>
                 {
                     // TODO: Only intercept for the hostname 'app' and passthrough for others
                     // TODO: Prevent directory traversal?
                     var appFile = Path.Combine(contentRootAbsolute, new Uri(url).AbsolutePath.Substring(1));
                     if (appFile == contentRootAbsolute)
-                    {
                         appFile = hostHtmlPath;
-                    }
 
                     contentType = GetContentType(appFile);
                     return File.Exists(appFile) ? File.OpenRead(appFile) : null;
-                });
-
-                // framework:// is resolved as embedded resources
-                options.CustomSchemeHandlers.Add("framework", (string url, out string contentType) =>
+                })
+                .RegisterCustomSchemeHandler("framework", (object sender, string scheme, string url, out string contentType) =>
                 {
                     contentType = GetContentType(url);
                     return SupplyFrameworkFile(url);
                 });
-            }, width, height, x, y, fullscreen);
+
+
 
             CancellationTokenSource appLifetimeCts = new CancellationTokenSource();
             Task.Factory.StartNew(async () =>
