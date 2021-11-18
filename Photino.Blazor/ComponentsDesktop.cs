@@ -32,36 +32,28 @@ namespace Photino.Blazor
                 UnhandledException(exception);
             };
 
-            photinoWindow = new PhotinoWindow()
-            {
-                Title = windowTitle,
-                Width = width,
-                Height = height,
-                FullScreen = fullscreen,
-                StartString = "<p>Loading...</p>" // StartString or StartUrl has to be initially set
-            };
-            photinoWindow.SetLocation(new Point(x, y));
-            
             var contentRootAbsolute = Path.GetDirectoryName(Path.GetFullPath(hostHtmlPath));
 
-            photinoWindow.RegisterCustomSchemeHandler(BlazorAppScheme,
-                (object _sender, string _scheme, string url, out string contentType) =>
+            photinoWindow = new PhotinoWindow()
+                .SetTitle(windowTitle)
+                .SetUseOsDefaultLocation(false)
+                .SetWidth(width)
+                .SetHeight(height)
+                .SetLeft(x)
+                .SetTop(y)
+                .SetFullScreen(fullscreen)
+                .RegisterCustomSchemeHandler(BlazorAppScheme, (object sender, string scheme, string url, out string contentType) =>
                 {
                     // TODO: Only intercept for the hostname 'app' and passthrough for others
                     // TODO: Prevent directory traversal?
                     var appFile = Path.Combine(contentRootAbsolute, new Uri(url).AbsolutePath.Substring(1));
                     if (appFile == contentRootAbsolute)
-                    {
                         appFile = hostHtmlPath;
-                    }
 
                     contentType = GetContentType(appFile);
                     return File.Exists(appFile) ? File.OpenRead(appFile) : null;
-                });
-
-            // framework:// is resolved as embedded resources
-            photinoWindow.RegisterCustomSchemeHandler("framework",
-                (object _sender, string _scheme, string url, out string contentType) =>
+                })
+                .RegisterCustomSchemeHandler("framework", (object sender, string scheme, string url, out string contentType) =>
                 {
                     contentType = GetContentType(url);
                     return SupplyFrameworkFile(url);
