@@ -7,13 +7,13 @@
 
   
   <ItemGroup>
-    <Content Update="wwwroot\**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <ProjectReference Include="..\..\Photino.Blazor\Photino.Blazor.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="$(SolutionDir)\Photino.Blazor\Photino.Blazor.csproj" />
+    <Content Update="wwwroot\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
