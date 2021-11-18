@@ -13,12 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		azure-pipelines-photino.blazor-dev.yml = azure-pipelines-photino.blazor-dev.yml
 		azure-pipelines-photino.blazor-prod.yml = azure-pipelines-photino.blazor-prod.yml
 		README.md = README.md
-		Photino.BlazorCommon.targets = Photino.BlazorCommon.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_1_Hello_World", "Samples\_1_Hello_World\_1_Hello_World.csproj", "{B5A5E655-DCAE-4553-AC8B-6E26287D9C3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "_1_Hello_World", "Samples\_1_Hello_World\_1_Hello_World.csproj", "{B5A5E655-DCAE-4553-AC8B-6E26287D9C3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +41,10 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {0639F843-32E3-4B90-BBB0-0F589AD82B9F}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B5A5E655-DCAE-4553-AC8B-6E26287D9C3B} = {1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0639F843-32E3-4B90-BBB0-0F589AD82B9F}
 	EndGlobalSection
 EndGlobal

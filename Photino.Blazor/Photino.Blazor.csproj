@@ -24,8 +24,6 @@
   <ItemGroup>
     <None Remove="Photino.Blazor.nuspec" />
   </ItemGroup>
-
-  <Import Project="$(SolutionDir)\Photino.BlazorCommon.targets" />
   
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.11" />
