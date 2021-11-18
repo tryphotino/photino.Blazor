@@ -8,6 +8,7 @@ using Microsoft.JSInterop.Infrastructure;
 using PhotinoNET;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.Json;
@@ -58,8 +59,6 @@ namespace Photino.Blazor
                     return SupplyFrameworkFile(url);
                 });
 
-
-
             CancellationTokenSource appLifetimeCts = new CancellationTokenSource();
             Task.Factory.StartNew(async () =>
             {
@@ -77,7 +76,8 @@ namespace Photino.Blazor
 
             try
             {
-                photinoWindow.Load(BlazorAppScheme + "://app/");
+                var blazorUri = new Uri(BlazorAppScheme + "://app/");
+                photinoWindow.Load(blazorUri);
                 photinoWindow.WaitForClose();
             }
             finally
