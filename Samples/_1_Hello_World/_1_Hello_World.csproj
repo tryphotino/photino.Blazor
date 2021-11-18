@@ -5,10 +5,11 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  
   <ItemGroup>
     <ProjectReference Include="..\..\Photino.Blazor\Photino.Blazor.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Content Update="wwwroot\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
