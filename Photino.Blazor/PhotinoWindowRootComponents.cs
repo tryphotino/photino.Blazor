@@ -1,6 +1,7 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -28,7 +29,7 @@ namespace Photino.Blazor
         /// <typeparam name="TComponent">The component type.</typeparam>
         /// <param name="selector">A CSS selector describing where the component should be added in the host page.</param>
         /// <param name="parameters">An optional dictionary of parameters to pass to the component.</param>
-        public void Add<TComponent>(string selector, IDictionary<string, object?>? parameters = null) where TComponent : IComponent
+        public void Add(Type typeComponent, string selector, IDictionary<string, object?>? parameters = null) 
         {
             var parameterView = parameters == null
                 ? ParameterView.Empty
@@ -37,7 +38,7 @@ namespace Photino.Blazor
             // Dispatch because this is going to be async, and we want to catch any errors
             _ = _manager.Dispatcher.InvokeAsync(async () =>
             {
-                await _manager.AddRootComponentAsync(typeof(TComponent), selector, parameterView);
+                await _manager.AddRootComponentAsync(typeComponent, selector, parameterView);
             });
         }
     }

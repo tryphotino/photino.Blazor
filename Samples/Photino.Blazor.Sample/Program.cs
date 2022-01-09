@@ -3,7 +3,7 @@ using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
 
-namespace HelloWorld
+namespace Photino.Blazor.Sample
 {
     class Program
     {
@@ -11,6 +11,7 @@ namespace HelloWorld
         static void Main(string[] args)
         {
             var appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
+
             appBuilder.Services
                 .AddLogging();
 
@@ -20,7 +21,8 @@ namespace HelloWorld
             var app = appBuilder.Build();
 
             // customize window
-            app.MainWindow.SetTitle("Photino Hello World");
+            app.MainWindow
+                .SetTitle("Photino Blazor Sample");
 
             AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
             {
@@ -28,7 +30,7 @@ namespace HelloWorld
             };
 
             app.Run();
-        }
 
+        }
     }
 }

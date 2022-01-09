@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -14,7 +15,7 @@ using PhotinoNET;
 
 namespace Photino.Blazor
 {
-    internal class PhotinoWebViewManager : WebViewManager
+    public class PhotinoWebViewManager : WebViewManager
     {
         private readonly PhotinoWindow _window;
 
@@ -22,11 +23,11 @@ namespace Photino.Blazor
         // because webview2 won't let you do top-level navigation to such a URL.
         // On Linux/Mac, we must use a custom scheme, because their webviews
         // don't have a way to intercept http:// scheme requests.
-        internal static readonly string BlazorAppScheme = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+        public static readonly string BlazorAppScheme = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
             ? "http"
             : "app";
 
-        internal static readonly string AppBaseUri
+        public static readonly string AppBaseUri
             = $"{BlazorAppScheme}://0.0.0.0/";
 
         public PhotinoWebViewManager(PhotinoWindow window, IServiceProvider provider, Dispatcher dispatcher, Uri appBaseUri, IFileProvider fileProvider, JSComponentConfigurationStore jsComponents, string hostPageRelativePath)

@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{1F04
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld", "Samples\HelloWorld\HelloWorld.csproj", "{80ED21DC-B719-4156-8ECB-95F3D3676308}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photino.Blazor.Sample", "Samples\Photino.Blazor.Sample\Photino.Blazor.Sample.csproj", "{F93401BA-DA5B-4974-8733-09F88DE17720}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,12 +33,17 @@ Global
 		{80ED21DC-B719-4156-8ECB-95F3D3676308}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80ED21DC-B719-4156-8ECB-95F3D3676308}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80ED21DC-B719-4156-8ECB-95F3D3676308}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F93401BA-DA5B-4974-8733-09F88DE17720}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F93401BA-DA5B-4974-8733-09F88DE17720}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F93401BA-DA5B-4974-8733-09F88DE17720}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F93401BA-DA5B-4974-8733-09F88DE17720}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{80ED21DC-B719-4156-8ECB-95F3D3676308} = {1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}
+		{F93401BA-DA5B-4974-8733-09F88DE17720} = {1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0639F843-32E3-4B90-BBB0-0F589AD82B9F}
