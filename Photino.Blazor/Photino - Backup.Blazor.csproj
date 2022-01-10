@@ -34,7 +34,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
     <PackageReference Include="Microsoft.JSInterop" Version="6.0.1" />
     <PackageReference Include="Photino.NET" Version="2.1.10" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
 
 </Project>
