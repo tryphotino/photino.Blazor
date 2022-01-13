@@ -33,10 +33,10 @@ jobs:
       displayName: 'NuGet Authenticate'
       
     #Build .JS project - create desktop.blazor.js file used in Photino.Bloazor project
-    - task: CmdLine@2
-      displayName: 'Build desktop.blazor.js'
-      inputs:
-        script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
+    #- task: CmdLine@2
+    #  displayName: 'Build desktop.blazor.js'
+    #  inputs:
+    #    script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
 
     #Build and Create NuGet package
     - task: CmdLine@2
