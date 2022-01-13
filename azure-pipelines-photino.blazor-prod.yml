@@ -21,14 +21,14 @@ jobs:
       displayName: 'Use .NET Core sdk'
       inputs:
         packageType: sdk
-        version: 5.0.100
+        version: "6.0.x"
         installationPath: $(Agent.ToolsDirectory)/dotnet
       
     #Build .JS project - create desktop.blazor.js file used in Photino.Bloazor project
-    - task: CmdLine@2
-      displayName: 'Build desktop.blazor.js'
-      inputs:
-        script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
+    #- task: CmdLine@2
+    #  displayName: 'Build desktop.blazor.js'
+    #  inputs:
+    #    script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
 
     #Build and Create NuGet package
     - task: CmdLine@2
