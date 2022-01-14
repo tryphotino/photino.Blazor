@@ -3,7 +3,7 @@ using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
 
-namespace Photino.Blazor.Sample
+namespace Photino.Blazor.Project
 {
     class Program
     {
@@ -23,7 +23,7 @@ namespace Photino.Blazor.Sample
             // customize window
             app.MainWindow
                 .SetIconFile("favicon.ico")
-                .SetTitle("Photino Blazor Sample");
+                .SetTitle("Photino Blazor Project");
 
             AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
             {

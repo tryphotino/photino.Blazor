@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Authors>TryPhotino</Authors>
     <Company>TryPhotino</Company>
-    <Description>.NET 5 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</Description>
+    <Description>.NET 6 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</Description>
     <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);SetPackageVersion</GenerateNuspecDependsOn>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageDescription>.NET 5 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</PackageDescription>
@@ -13,6 +13,7 @@
     <RepositoryUrl>https://github.com/tryphotino/photino.Blazor</RepositoryUrl>
     <TargetFramework>net6.0</TargetFramework>
     <Title>Photino.blazor</Title>
+    <PackageIcon>photino.png</PackageIcon>
   </PropertyGroup>
 
   <Target Name="SetPackageVersion" DependsOnTargets="Build">
@@ -23,6 +24,13 @@
 
   <ItemGroup>
     <None Remove="Photino.Blazor.nuspec" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\photino.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
