@@ -8,6 +8,30 @@ Photino.Blazor builds on <span>Photino.</span>NET to add Blazor capabilities.
 Photino uses the OSs built-in WebKit-based browser control for Windows, macOS and Linux.
 Photino is the lightest cross-platform framework. Compared to Electron, a Photino app is up to 110 times smaller! And it uses far less system memory too!
 
+## Usage
+```C#
+var appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
+
+appBuilder.Services
+	.AddLogging();
+
+// register root component and selector
+appBuilder.RootComponents.Add<App>("app");
+
+var app = appBuilder.Build();
+
+// customize window
+app.MainWindow
+	.SetTitle("Photino Blazor Sample");
+
+AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
+{
+	app.MainWindow.OpenAlertWindow("Fatal exception", error.ExceptionObject.ToString());
+};
+
+app.Run();
+```
+
 
 ## Photino.Blazor
 
