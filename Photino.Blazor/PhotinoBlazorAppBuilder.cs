@@ -39,10 +39,13 @@ namespace Photino.Blazor
         public IServiceCollection Services { get; }
 
 
-        public PhotinoBlazorApp Build()
+        public PhotinoBlazorApp Build(Action<IServiceProvider> serviceProviderOptions = null)
         {
             var sp = Services.BuildServiceProvider();
             var app = sp.GetService<PhotinoBlazorApp>();
+
+            serviceProviderOptions?.Invoke(sp);
+
             app.Initialize(sp, RootComponents);
             return app;
         }
