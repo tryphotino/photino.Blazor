@@ -37,7 +37,7 @@ namespace Photino.Blazor
             // We assume the host page is always in the root of the content directory, because it's
             // unclear there's any other use case. We can add more options later if so.
             string hostPage = "index.html";
-            var contentRootDir = Path.Combine(Path.GetDirectoryName(typeof(PhotinoBlazorApp).Assembly.Location), "wwwroot");
+            var contentRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
             var fileProvider = new PhysicalFileProvider(contentRootDir);
 
             var dispatcher = new PhotinoDispatcher(MainWindow);
