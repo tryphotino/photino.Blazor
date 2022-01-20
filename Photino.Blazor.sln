@@ -19,10 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelloWorld", "Samples\Hello
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photino.Blazor.Sample", "Samples\Photino.Blazor.Sample\Photino.Blazor.Sample.csproj", "{7C8371BF-E92B-437F-916E-53C0DADC2C54}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photino.Blazor.MudBlazorSample", "Samples\Photino.Blazor.MudBlazorSample\Photino.Blazor.MudBlazorSample.csproj", "{0522BBB2-0840-4E5B-AE49-9C05836E28C7}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photino.Blazor.Templates", "Templates\Photino.Blazor.Templates.csproj", "{8A0B71A7-AF11-40FC-BD1E-75E2B9EA8B6A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,14 +37,6 @@ Global
 		{7C8371BF-E92B-437F-916E-53C0DADC2C54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C8371BF-E92B-437F-916E-53C0DADC2C54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C8371BF-E92B-437F-916E-53C0DADC2C54}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0522BBB2-0840-4E5B-AE49-9C05836E28C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0522BBB2-0840-4E5B-AE49-9C05836E28C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0522BBB2-0840-4E5B-AE49-9C05836E28C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0522BBB2-0840-4E5B-AE49-9C05836E28C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A0B71A7-AF11-40FC-BD1E-75E2B9EA8B6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A0B71A7-AF11-40FC-BD1E-75E2B9EA8B6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A0B71A7-AF11-40FC-BD1E-75E2B9EA8B6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A0B71A7-AF11-40FC-BD1E-75E2B9EA8B6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,7 +44,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C5847701-920B-44BB-899A-DAEB2AA8E023} = {1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}
 		{7C8371BF-E92B-437F-916E-53C0DADC2C54} = {1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}
-		{0522BBB2-0840-4E5B-AE49-9C05836E28C7} = {1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0639F843-32E3-4B90-BBB0-0F589AD82B9F}
