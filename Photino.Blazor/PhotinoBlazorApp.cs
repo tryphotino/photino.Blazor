@@ -13,7 +13,10 @@ namespace Photino.Blazor
 {
     public class PhotinoBlazorApp
     {
-        private IServiceProvider _services;
+        /// <summary>
+        /// Gets configuration for the service provider.
+        /// </summary>
+        public IServiceProvider Services { get; private set; }
 
         /// <summary>
         /// Gets configuration for the root components in the window.
@@ -22,7 +25,7 @@ namespace Photino.Blazor
 
         internal void Initialize(IServiceProvider services, RootComponentList rootComponents)
         {
-            _services = services;
+            Services = services;
 
             MainWindow = new PhotinoWindow()
                 .SetTitle("Photino.Blazor App")
