@@ -22,6 +22,7 @@ namespace Photino.Blazor.Sample
 
             // customize window
             app.MainWindow
+                .SetIconFile("favicon.ico")
                 .SetTitle("Photino Blazor Sample");
 
             AppDomain.CurrentDomain.UnhandledException += (sender, error) =>

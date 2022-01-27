@@ -20,7 +20,9 @@ namespace HelloWorld
             var app = appBuilder.Build();
 
             // customize window
-            app.MainWindow.SetTitle("Photino Hello World");
+            app.MainWindow
+                .SetIconFile("favicon.ico")
+                .SetTitle("Photino Hello World");
 
             AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
             {

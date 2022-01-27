@@ -22,6 +22,7 @@ var app = appBuilder.Build();
 
 // customize window
 app.MainWindow
+    .SetIcon(favicon.ico)
 	.SetTitle("Photino Blazor Sample");
 
 AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
