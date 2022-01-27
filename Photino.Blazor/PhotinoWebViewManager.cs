@@ -34,6 +34,10 @@ namespace Photino.Blazor
             : base(provider, dispatcher, appBaseUri, fileProvider, jsComponents, hostPageRelativePath)
         {
             _window = window ?? throw new ArgumentNullException(nameof(window));
+
+            // Create a scheduler that uses one threads.
+            var sts = new Utils.SynchronousTaskScheduler();
+
             _window.WebMessageReceived += (sender, message) =>
             {
                 // On some platforms, we need to move off the browser UI thread
@@ -45,7 +49,7 @@ namespace Photino.Blazor
                     var messageOriginUrl = new Uri(AppBaseUri);
 
                     MessageReceived(messageOriginUrl, (string)message!);
-                }, message, CancellationToken.None, TaskCreationOptions.DenyChildAttach, TaskScheduler.Default);
+                }, message, CancellationToken.None, TaskCreationOptions.DenyChildAttach, sts);
             };
         }
 

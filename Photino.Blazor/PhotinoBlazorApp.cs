@@ -13,7 +13,10 @@ namespace Photino.Blazor
 {
     public class PhotinoBlazorApp
     {
-        private IServiceProvider _services;
+        /// <summary>
+        /// Gets configuration for the service provider.
+        /// </summary>
+        public IServiceProvider Services { get; private set; }
 
         /// <summary>
         /// Gets configuration for the root components in the window.
@@ -22,7 +25,7 @@ namespace Photino.Blazor
 
         internal void Initialize(IServiceProvider services, RootComponentList rootComponents)
         {
-            _services = services;
+            Services = services;
 
             MainWindow = new PhotinoWindow()
                 .SetTitle("Photino.Blazor App")
@@ -37,13 +40,12 @@ namespace Photino.Blazor
             // We assume the host page is always in the root of the content directory, because it's
             // unclear there's any other use case. We can add more options later if so.
             string hostPage = "index.html";
-            var contentRootDir = Path.GetDirectoryName(Path.GetFullPath(hostPage))!;
-            var hostPageRelativePath = Path.GetRelativePath(contentRootDir, hostPage);
+            var contentRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
             var fileProvider = new PhysicalFileProvider(contentRootDir);
 
             var dispatcher = new PhotinoDispatcher(MainWindow);
             var jsComponents = new JSComponentConfigurationStore();
-            WindowManager = new PhotinoWebViewManager(MainWindow, services, dispatcher, new Uri(PhotinoWebViewManager.AppBaseUri), fileProvider, jsComponents, hostPageRelativePath);
+            WindowManager = new PhotinoWebViewManager(MainWindow, services, dispatcher, new Uri(PhotinoWebViewManager.AppBaseUri), fileProvider, jsComponents, hostPage);
             RootComponents = new BlazorWindowRootComponents(WindowManager, jsComponents);
             foreach(var component in rootComponents)
             {
