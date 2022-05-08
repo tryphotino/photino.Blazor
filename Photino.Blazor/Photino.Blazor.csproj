@@ -6,7 +6,7 @@
     <Description>.NET 6 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</Description>
     <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);SetPackageVersion</GenerateNuspecDependsOn>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <PackageDescription>.NET 5 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</PackageDescription>
+    <PackageDescription>.NET 6 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</PackageDescription>
     <PackageId>Photino.Blazor</PackageId>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/tryphotino/photino.Blazor</PackageProjectUrl>
