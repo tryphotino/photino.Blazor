@@ -16,7 +16,7 @@ namespace Photino.Blazor
             Services = new ServiceCollection();
         }
 
-        public static PhotinoBlazorAppBuilder CreateDefault(string[]? args = default)
+        public static PhotinoBlazorAppBuilder CreateDefault(string[] args = default)
         {
             // We don't use the args for anything right now, but we want to accept them
             // here so that it shows up this way in the project templates.

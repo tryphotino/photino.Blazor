@@ -51,7 +51,6 @@ namespace Photino.Blazor
 
             _window = window ?? throw new ArgumentNullException(nameof(window));
 
-            PhotinoWindow x;
             _uiThreadId = (int)typeof(PhotinoWindow).GetField("_managedThreadId", BindingFlags.NonPublic | BindingFlags.Instance)!
                 .GetValue(_window)!;
 
@@ -60,7 +59,7 @@ namespace Photino.Blazor
 
         private readonly State _state;
 
-        public event UnhandledExceptionEventHandler? UnhandledException;
+        public event UnhandledExceptionEventHandler UnhandledException;
 
         public Task InvokeAsync(Action action)
         {

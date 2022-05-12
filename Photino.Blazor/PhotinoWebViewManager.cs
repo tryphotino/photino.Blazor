@@ -53,11 +53,12 @@ namespace Photino.Blazor
             };
         }
 
-        public Stream HandleWebRequest(object sender, string schema, string url, out string? contentType)
+        public Stream HandleWebRequest(object sender, string schema, string url, out string contentType)
         {
             // It would be better if we were told whether or not this is a navigation request, but
             // since we're not, guess.
-            var hasFileExtension = url.LastIndexOf('.') > url.LastIndexOf('/');
+            var localPath = (new Uri(url)).LocalPath;
+            var hasFileExtension = localPath.LastIndexOf('.') > localPath.LastIndexOf('/');
 
             if (url.StartsWith(AppBaseUri, StringComparison.Ordinal)
                 && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage, out var content, out var headers))
