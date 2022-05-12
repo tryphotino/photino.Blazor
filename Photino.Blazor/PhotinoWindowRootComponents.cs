@@ -29,7 +29,7 @@ namespace Photino.Blazor
         /// <typeparam name="TComponent">The component type.</typeparam>
         /// <param name="selector">A CSS selector describing where the component should be added in the host page.</param>
         /// <param name="parameters">An optional dictionary of parameters to pass to the component.</param>
-        public void Add(Type typeComponent, string selector, IDictionary<string, object?>? parameters = null) 
+        public void Add(Type typeComponent, string selector, IDictionary<string, object> parameters = null) 
         {
             var parameterView = parameters == null
                 ? ParameterView.Empty
