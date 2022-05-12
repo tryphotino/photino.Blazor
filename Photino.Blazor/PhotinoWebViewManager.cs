@@ -3,7 +3,6 @@
 
 using System;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -58,7 +57,7 @@ namespace Photino.Blazor
         {
             // It would be better if we were told whether or not this is a navigation request, but
             // since we're not, guess.
-            var hasFileExtension = new Uri(url).AbsolutePath.Split('/').Last().Contains('.');
+            var hasFileExtension = url.LastIndexOf('.') > url.LastIndexOf('/');
 
             if (url.StartsWith(AppBaseUri, StringComparison.Ordinal)
                 && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage, out var content, out var headers))
