@@ -57,7 +57,8 @@ namespace Photino.Blazor
         {
             // It would be better if we were told whether or not this is a navigation request, but
             // since we're not, guess.
-            var hasFileExtension = url.LastIndexOf('.') > url.LastIndexOf('/');
+            var localPath = (new Uri(url)).LocalPath;
+            var hasFileExtension = localPath.LastIndexOf('.') > localPath.LastIndexOf('/');
 
             if (url.StartsWith(AppBaseUri, StringComparison.Ordinal)
                 && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage, out var content, out var headers))
@@ -79,7 +80,7 @@ namespace Photino.Blazor
 
         protected override void SendMessage(string message)
         {
-            _window.SendWebMessage(message);
+            Task.Run(() => Dispatcher.InvokeAsync(() => _window.SendWebMessage(message)));
         }
     }
 }
