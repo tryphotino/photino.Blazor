@@ -3,8 +3,8 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
@@ -28,9 +28,11 @@ namespace Photino.Blazor
             : "app";
 
         public static readonly string AppBaseUri
-            = $"{BlazorAppScheme}://0.0.0.0/";
+            = $"{BlazorAppScheme}://{Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyAppIdAttribute>()?.AppId}/";
 
-        public PhotinoWebViewManager(PhotinoWindow window, IServiceProvider provider, Dispatcher dispatcher, Uri appBaseUri, IFileProvider fileProvider, JSComponentConfigurationStore jsComponents, string hostPageRelativePath)
+        public PhotinoWebViewManager(PhotinoWindow window, IServiceProvider provider, Dispatcher dispatcher,
+            Uri appBaseUri, IFileProvider fileProvider, JSComponentConfigurationStore jsComponents,
+            string hostPageRelativePath)
             : base(provider, dispatcher, appBaseUri, fileProvider, jsComponents, hostPageRelativePath)
         {
             _window = window ?? throw new ArgumentNullException(nameof(window));
@@ -61,7 +63,8 @@ namespace Photino.Blazor
             var hasFileExtension = localPath.LastIndexOf('.') > localPath.LastIndexOf('/');
 
             if (url.StartsWith(AppBaseUri, StringComparison.Ordinal)
-                && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage, out var content, out var headers))
+                && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage,
+                    out var content, out var headers))
             {
                 headers.TryGetValue("Content-Type", out contentType);
                 return content;
@@ -80,7 +83,8 @@ namespace Photino.Blazor
 
         protected override void SendMessage(string message)
         {
-            Task.Run(() => Dispatcher.InvokeAsync(() => _window.SendWebMessage(message)));
+            Task.Run(() => { Dispatcher.InvokeAsync(() => _window.SendWebMessage(message)); })
+                .Wait(TimeSpan.FromSeconds(2));
         }
     }
 }

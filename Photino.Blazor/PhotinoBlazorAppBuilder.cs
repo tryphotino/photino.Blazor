@@ -42,7 +42,7 @@ namespace Photino.Blazor
         public PhotinoBlazorApp Build(Action<IServiceProvider> serviceProviderOptions = null)
         {
             var sp = Services.BuildServiceProvider();
-            var app = sp.GetService<PhotinoBlazorApp>();
+            var app = sp.GetRequiredService<PhotinoBlazorApp>();
 
             serviceProviderOptions?.Invoke(sp);
 
