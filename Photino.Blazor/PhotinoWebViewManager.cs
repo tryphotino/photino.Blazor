@@ -84,7 +84,7 @@ namespace Photino.Blazor
         protected override void SendMessage(string message)
         {
             Task.Run(() => { Dispatcher.InvokeAsync(() => _window.SendWebMessage(message)); })
-                .Wait(TimeSpan.FromSeconds(2));
+                .Wait();
         }
     }
 }
