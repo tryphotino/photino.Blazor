@@ -10,27 +10,31 @@ Photino is the lightest cross-platform framework. Compared to Electron, a Photin
 
 ## Usage
 ```C#
-var appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
-
-appBuilder.Services
-	.AddLogging();
-
-// register root component and selector
-appBuilder.RootComponents.Add<App>("app");
-
-var app = appBuilder.Build();
-
-// customize window
-app.MainWindow
-    .SetIcon(favicon.ico)
-	.SetTitle("Photino Blazor Sample");
-
-AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
+[STAThread]
+static void Main(string[] args)
 {
-	app.MainWindow.OpenAlertWindow("Fatal exception", error.ExceptionObject.ToString());
-};
+	var appBuilder = PhotinoBlazorAppBuilder.CreateDefault(args);
 
-app.Run();
+	appBuilder.Services
+		.AddLogging();
+
+	// register root component and selector
+	appBuilder.RootComponents.Add<App>("app");
+
+	var app = appBuilder.Build();
+
+	// customize window
+	app.MainWindow
+	    .SetIcon(favicon.ico)
+		.SetTitle("Photino Blazor Sample");
+
+	AppDomain.CurrentDomain.UnhandledException += (sender, error) =>
+	{
+		app.MainWindow.OpenAlertWindow("Fatal exception", error.ExceptionObject.ToString());
+	};
+
+	app.Run();
+}
 ```
 
 
