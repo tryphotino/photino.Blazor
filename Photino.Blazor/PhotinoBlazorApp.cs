@@ -1,5 +1,3 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using Microsoft.Extensions.FileProviders;
 using PhotinoNET;
 using System;
 using System.IO;
@@ -8,21 +6,29 @@ namespace Photino.Blazor
 {
     public class PhotinoBlazorApp
     {
+        public PhotinoBlazorApp(IServiceProvider services, BlazorWindowRootComponents rootComponents, PhotinoWindow mainWindow, PhotinoWebViewManager windowManager, RootComponentList components)
+        {
+            Services = services;
+            RootComponents = rootComponents;
+            MainWindow = mainWindow;
+            WindowManager = windowManager;
+
+            Initialize(components);
+        }
+
         /// <summary>
         /// Gets configuration for the service provider.
         /// </summary>
-        public IServiceProvider Services { get; private set; }
+        public IServiceProvider Services { get; }
 
         /// <summary>
         /// Gets configuration for the root components in the window.
         /// </summary>
-        public BlazorWindowRootComponents RootComponents { get; private set; }
+        public BlazorWindowRootComponents RootComponents { get; }
 
-        internal void Initialize(IServiceProvider services, RootComponentList rootComponents)
+        private void Initialize(RootComponentList rootComponents)
         {
-            Services = services;
-
-            MainWindow = new PhotinoWindow()
+            MainWindow
                 .SetTitle("Photino.Blazor App")
                 .SetUseOsDefaultLocation(false)
                 .SetWidth(1000)
@@ -32,25 +38,15 @@ namespace Photino.Blazor
 
             MainWindow.RegisterCustomSchemeHandler(PhotinoWebViewManager.BlazorAppScheme, HandleWebRequest);
 
-            // We assume the host page is always in the root of the content directory, because it's
-            // unclear there's any other use case. We can add more options later if so.
-            string hostPage = "index.html";
-            var contentRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
-            var fileProvider = new PhysicalFileProvider(contentRootDir);
-
-            var dispatcher = new PhotinoDispatcher(MainWindow);
-            var jsComponents = new JSComponentConfigurationStore();
-            WindowManager = new PhotinoWebViewManager(MainWindow, services, dispatcher, new Uri(PhotinoWebViewManager.AppBaseUri), fileProvider, jsComponents, hostPage);
-            RootComponents = new BlazorWindowRootComponents(WindowManager, jsComponents);
-            foreach (var component in rootComponents)
+            foreach(var component in rootComponents)
             {
                 RootComponents.Add(component.Item1, component.Item2);
             }
         }
 
-        public PhotinoWindow MainWindow { get; private set; }
+        public PhotinoWindow MainWindow { get; }
 
-        public PhotinoWebViewManager WindowManager { get; private set; }
+        public PhotinoWebViewManager WindowManager { get; }
 
         public void Run()
         {
@@ -60,6 +56,5 @@ namespace Photino.Blazor
 
         public Stream HandleWebRequest(object sender, string scheme, string url, out string contentType)
                 => WindowManager.HandleWebRequest(sender, scheme, url, out contentType!)!;
-
     }
 }
