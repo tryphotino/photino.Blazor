@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -39,14 +40,14 @@ namespace Photino.Blazor
         public IServiceCollection Services { get; }
 
 
-        public PhotinoBlazorApp Build(Action<IServiceProvider> serviceProviderOptions = null)
+        public PhotinoBlazorApp Build(Action<IServiceProvider> serviceProviderOptions = null, IFileProvider fileprovider = null)
         {
             var sp = Services.BuildServiceProvider();
             var app = sp.GetRequiredService<PhotinoBlazorApp>();
 
             serviceProviderOptions?.Invoke(sp);
 
-            app.Initialize(sp, RootComponents);
+            app.Initialize(sp, RootComponents, fileprovider);
             return app;
         }
     }

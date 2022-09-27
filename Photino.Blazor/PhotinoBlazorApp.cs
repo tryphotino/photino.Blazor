@@ -18,7 +18,7 @@ namespace Photino.Blazor
         /// </summary>
         public BlazorWindowRootComponents RootComponents { get; private set; }
 
-        internal void Initialize(IServiceProvider services, RootComponentList rootComponents)
+        internal void Initialize(IServiceProvider services, RootComponentList rootComponents, IFileProvider fileprovider)
         {
             Services = services;
 
@@ -36,7 +36,7 @@ namespace Photino.Blazor
             // unclear there's any other use case. We can add more options later if so.
             string hostPage = "index.html";
             var contentRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
-            var fileProvider = new PhysicalFileProvider(contentRootDir);
+            var fileProvider = fileprovider ?? new PhysicalFileProvider(contentRootDir);
 
             var dispatcher = new PhotinoDispatcher(MainWindow);
             var jsComponents = new JSComponentConfigurationStore();
