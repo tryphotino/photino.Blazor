@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components.Web;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using PhotinoNET;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Photino.Blazor
 {
@@ -47,7 +42,7 @@ namespace Photino.Blazor
             var jsComponents = new JSComponentConfigurationStore();
             WindowManager = new PhotinoWebViewManager(MainWindow, services, dispatcher, new Uri(PhotinoWebViewManager.AppBaseUri), fileProvider, jsComponents, hostPage);
             RootComponents = new BlazorWindowRootComponents(WindowManager, jsComponents);
-            foreach(var component in rootComponents)
+            foreach (var component in rootComponents)
             {
                 RootComponents.Add(component.Item1, component.Item2);
             }
