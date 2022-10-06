@@ -3,9 +3,10 @@
 
 using System;
 using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -18,6 +19,7 @@ namespace Photino.Blazor
     public class PhotinoWebViewManager : WebViewManager
     {
         private readonly PhotinoWindow _window;
+        private readonly Channel<string> _channel;
 
         // On Windows, we can't use a custom scheme to host the initial HTML,
         // because webview2 won't let you do top-level navigation to such a URL.
@@ -28,9 +30,11 @@ namespace Photino.Blazor
             : "app";
 
         public static readonly string AppBaseUri
-            = $"{BlazorAppScheme}://0.0.0.0/";
+            = $"{BlazorAppScheme}://{Assembly.GetEntryAssembly()?.GetCustomAttribute<AssemblyAppIdAttribute>()?.AppId}/";
 
-        public PhotinoWebViewManager(PhotinoWindow window, IServiceProvider provider, Dispatcher dispatcher, Uri appBaseUri, IFileProvider fileProvider, JSComponentConfigurationStore jsComponents, string hostPageRelativePath)
+        public PhotinoWebViewManager(PhotinoWindow window, IServiceProvider provider, Dispatcher dispatcher,
+            Uri appBaseUri, IFileProvider fileProvider, JSComponentConfigurationStore jsComponents,
+            string hostPageRelativePath)
             : base(provider, dispatcher, appBaseUri, fileProvider, jsComponents, hostPageRelativePath)
         {
             _window = window ?? throw new ArgumentNullException(nameof(window));
@@ -51,6 +55,10 @@ namespace Photino.Blazor
                     MessageReceived(messageOriginUrl, (string)message!);
                 }, message, CancellationToken.None, TaskCreationOptions.DenyChildAttach, sts);
             };
+
+            //Create channel and start reader
+            _channel = Channel.CreateUnbounded<string>(new UnboundedChannelOptions() { SingleReader = true, SingleWriter = false, AllowSynchronousContinuations = false });
+            Task.Run(messagePump);
         }
 
         public Stream HandleWebRequest(object sender, string schema, string url, out string contentType)
@@ -61,7 +69,8 @@ namespace Photino.Blazor
             var hasFileExtension = localPath.LastIndexOf('.') > localPath.LastIndexOf('/');
 
             if (url.StartsWith(AppBaseUri, StringComparison.Ordinal)
-                && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage, out var content, out var headers))
+                && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage,
+                    out var content, out var headers))
             {
                 headers.TryGetValue("Content-Type", out contentType);
                 return content;
@@ -80,7 +89,31 @@ namespace Photino.Blazor
 
         protected override void SendMessage(string message)
         {
-            Task.Run(() => Dispatcher.InvokeAsync(() => _window.SendWebMessage(message)));
+            while (!_channel.Writer.TryWrite(message))
+                Thread.Sleep(200);
+        }
+
+        async Task messagePump()
+        {
+            var reader = _channel.Reader;
+            try
+            {
+                while (true)
+                {
+                    var message = await reader.ReadAsync();
+                    _window.SendWebMessage(message);
+                }
+            }
+            catch (ChannelClosedException) { }
+        }
+
+        protected override ValueTask DisposeAsyncCore()
+        {
+            //complete channel
+            try { _channel.Writer.Complete(); } catch { }
+
+            //continue disposing
+            return base.DisposeAsyncCore();
         }
     }
 }
