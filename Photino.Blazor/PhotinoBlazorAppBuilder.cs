@@ -36,13 +36,14 @@ namespace Photino.Blazor
         public PhotinoBlazorApp Build(Action<IServiceProvider> serviceProviderOptions = null)
         {
             // register root components with DI container
-            Services.AddSingleton(RootComponents);
+            // Services.AddSingleton(RootComponents);
 
             var sp = Services.BuildServiceProvider();
             var app = sp.GetRequiredService<PhotinoBlazorApp>();
 
             serviceProviderOptions?.Invoke(sp);
 
+            app.Initialize(sp, RootComponents);
             return app;
         }
     }

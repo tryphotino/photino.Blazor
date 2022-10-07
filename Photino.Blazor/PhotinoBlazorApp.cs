@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using PhotinoNET;
 using System;
 using System.IO;
@@ -6,28 +7,23 @@ namespace Photino.Blazor
 {
     public class PhotinoBlazorApp
     {
-        public PhotinoBlazorApp(IServiceProvider services, BlazorWindowRootComponents rootComponents, PhotinoWindow mainWindow, PhotinoWebViewManager windowManager, RootComponentList components)
-        {
-            Services = services;
-            RootComponents = rootComponents;
-            MainWindow = mainWindow;
-            WindowManager = windowManager;
-
-            Initialize(components);
-        }
-
         /// <summary>
         /// Gets configuration for the service provider.
         /// </summary>
-        public IServiceProvider Services { get; }
+        public IServiceProvider Services { get; private set; }
 
         /// <summary>
         /// Gets configuration for the root components in the window.
         /// </summary>
-        public BlazorWindowRootComponents RootComponents { get; }
+        public BlazorWindowRootComponents RootComponents { get; private set; }
 
-        private void Initialize(RootComponentList rootComponents)
+        internal void Initialize(IServiceProvider services, RootComponentList rootComponents)
         {
+            Services = services;
+            RootComponents = Services.GetService<BlazorWindowRootComponents>();
+            MainWindow = Services.GetService<PhotinoWindow>();
+            WindowManager = Services.GetService<PhotinoWebViewManager>();
+
             MainWindow
                 .SetTitle("Photino.Blazor App")
                 .SetUseOsDefaultLocation(false)
@@ -44,9 +40,9 @@ namespace Photino.Blazor
             }
         }
 
-        public PhotinoWindow MainWindow { get; }
+        public PhotinoWindow MainWindow { get; private set; }
 
-        public PhotinoWebViewManager WindowManager { get; }
+        public PhotinoWebViewManager WindowManager { get; private set; }
 
         public void Run()
         {
