@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,7 +9,7 @@ namespace Photino.Blazor
 {
     public class PhotinoHttpHandler : DelegatingHandler
     {
-        private PhotinoBlazorApp app;
+        private readonly PhotinoBlazorApp app;
 
         //use this constructor if a handler is registered in DI to inject dependencies
         public PhotinoHttpHandler(PhotinoBlazorApp app) : this(app, null)
