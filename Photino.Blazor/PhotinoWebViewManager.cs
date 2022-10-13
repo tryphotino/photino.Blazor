@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebView;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using PhotinoNET;
 using System;
 using System.IO;
@@ -31,9 +32,8 @@ namespace Photino.Blazor
         public static readonly string AppBaseUri = $"{BlazorAppScheme}://localhost/";
 
         public PhotinoWebViewManager(PhotinoWindow window, IServiceProvider provider, Dispatcher dispatcher,
-            Uri appBaseUri, IFileProvider fileProvider, JSComponentConfigurationStore jsComponents,
-            string hostPageRelativePath)
-            : base(provider, dispatcher, appBaseUri, fileProvider, jsComponents, hostPageRelativePath)
+            IFileProvider fileProvider, JSComponentConfigurationStore jsComponents, IOptions<PhotinoBlazorAppConfiguration> config)
+            : base(provider, dispatcher, config.Value.AppBaseUri, fileProvider, jsComponents, config.Value.HostPage)
         {
             _window = window ?? throw new ArgumentNullException(nameof(window));
 

@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.DependencyInjection;
 using PhotinoNET;
 using System;
 using System.IO;
@@ -21,8 +20,11 @@ namespace Photino.Blazor
         internal void Initialize(IServiceProvider services, RootComponentList rootComponents)
         {
             Services = services;
+            RootComponents = Services.GetService<BlazorWindowRootComponents>();
+            MainWindow = Services.GetService<PhotinoWindow>();
+            WindowManager = Services.GetService<PhotinoWebViewManager>();
 
-            MainWindow = new PhotinoWindow()
+            MainWindow
                 .SetTitle("Photino.Blazor App")
                 .SetUseOsDefaultLocation(false)
                 .SetWidth(1000)
@@ -32,17 +34,7 @@ namespace Photino.Blazor
 
             MainWindow.RegisterCustomSchemeHandler(PhotinoWebViewManager.BlazorAppScheme, HandleWebRequest);
 
-            // We assume the host page is always in the root of the content directory, because it's
-            // unclear there's any other use case. We can add more options later if so.
-            string hostPage = "index.html";
-            var contentRootDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
-            var fileProvider = new PhysicalFileProvider(contentRootDir);
-
-            var dispatcher = new PhotinoDispatcher(MainWindow);
-            var jsComponents = new JSComponentConfigurationStore();
-            WindowManager = new PhotinoWebViewManager(MainWindow, services, dispatcher, new Uri(PhotinoWebViewManager.AppBaseUri), fileProvider, jsComponents, hostPage);
-            RootComponents = new BlazorWindowRootComponents(WindowManager, jsComponents);
-            foreach (var component in rootComponents)
+            foreach(var component in rootComponents)
             {
                 RootComponents.Add(component.Item1, component.Item2);
             }
@@ -60,6 +52,5 @@ namespace Photino.Blazor
 
         public Stream HandleWebRequest(object sender, string scheme, string url, out string contentType)
                 => WindowManager.HandleWebRequest(sender, scheme, url, out contentType!)!;
-
     }
 }
