@@ -11,7 +11,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/tryphotino/photino.Blazor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/tryphotino/photino.Blazor</RepositoryUrl>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <Title>Photino.blazor</Title>
     <PackageIcon>photino.png</PackageIcon>
   </PropertyGroup>
@@ -33,16 +33,18 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components" Version="6.0.10" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
     <PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="6.0.10" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-    <PackageReference Include="Microsoft.JSInterop" Version="6.0.10" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Photino.NET" Version="2.3.0" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
   </ItemGroup>
 
 </Project>
