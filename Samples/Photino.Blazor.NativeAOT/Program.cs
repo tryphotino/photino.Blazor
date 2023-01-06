@@ -3,7 +3,7 @@ using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor;
 
-namespace Photino.Blazor.Sample
+namespace Photino.Blazor.NativeAOT
 {
     class Program
     {
