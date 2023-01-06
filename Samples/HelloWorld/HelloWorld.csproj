@@ -2,14 +2,9 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<ApplicationIcon>favicon.ico</ApplicationIcon>
-    <PublishAot>true</PublishAot>
 	</PropertyGroup>
-
-  <ItemGroup>
-    <IlcArg Include="--nometadatablocking" />
-  </ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Photino.Blazor\Photino.Blazor.csproj" />

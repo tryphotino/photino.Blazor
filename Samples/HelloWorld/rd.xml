@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Directives>
-  <Application>
-    <Assembly Name="HelloWorld" Dynamic="Required All">
-      <Type Name="HelloWorld.App" Dynamic="Required All" />
-    </Assembly>
-  </Application>
-</Directives>
