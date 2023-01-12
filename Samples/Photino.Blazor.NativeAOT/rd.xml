@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Directives>
+  <Application>
+    <Assembly Name="Photino.Blazor.NativeAOT" Dynamic="Required All">
+      <Type Name="Photino.Blazor.NativeAOT.App" Dynamic="Required All" />
+    </Assembly>
+  </Application>
+</Directives>

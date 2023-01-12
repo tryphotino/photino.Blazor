@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+	
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net7.0</TargetFramework>
+		<ApplicationIcon>favicon.ico</ApplicationIcon>
+		<PublishAot>true</PublishAot>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Photino.Blazor\Photino.Blazor.csproj" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <RdXmlFile Include="rd.xml" />
+    <RdXmlFile Include="Microsoft.AspNetCore.Components.Web.rd.xml" />
+    <IlcArg Include="--nometadatablocking" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Content Update="wwwroot\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="favicon.ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>
