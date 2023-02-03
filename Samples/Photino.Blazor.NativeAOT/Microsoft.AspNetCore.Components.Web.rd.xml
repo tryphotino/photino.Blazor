@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Directives>
+  <Application>
+    <Assembly Name="System.Text.Json">
+      <Type Name="System.Text.Json.Serialization.Converters.ArrayConverter`2[[System.Text.Json.JsonElement[]],[System.Text.Json.JsonElement]]" Dynamic="Required All" />
+      <Type Name="System.Text.Json.Serialization.Converters.ArrayConverter`2[[Microsoft.AspNetCore.Components.Web.JSComponentConfigurationStore+JSComponentParameter[],Microsoft.AspNetCore.Components.Web],[Microsoft.AspNetCore.Components.Web.JSComponentConfigurationStore+JSComponentParameter,Microsoft.AspNetCore.Components.Web]]" Dynamic="Required All" />
+      <Type Name="System.Text.Json.Serialization.Converters.EnumConverter`1[[Microsoft.JSInterop.JSCallResultType,Microsoft.JSInterop]]" Dynamic="Required All" />
+      <Type Name="System.Text.Json.Serialization.Converters.ObjectDefaultConverter`1[[System.Threading.Tasks.VoidTaskResult,System.Private.CoreLib]]" Dynamic="Required All" />
+    </Assembly>
+    <Assembly Name="Microsoft.JSInterop">
+      <Type Name="Microsoft.JSInterop.Infrastructure.TaskGenericsUtil+TaskResultGetter`1[[System.Threading.Tasks.VoidTaskResult,System.Private.CoreLib]]" Dynamic="Required All" />
+    </Assembly>
+    <Assembly Name="System.Private.CoreLib">
+      <Type Name="System.Action`2[[Microsoft.AspNetCore.Components.Routing.Router,Microsoft.AspNetCore.Components],[Microsoft.AspNetCore.Components.EventCallback`1[[Microsoft.AspNetCore.Components.Routing.NavigationContext,Microsoft.AspNetCore.Components]],Microsoft.AspNetCore.Components]]" Dynamic="Required All" />
+      <Type Name="System.Action`2[[Microsoft.AspNetCore.Components.Routing.NavLink,Microsoft.AspNetCore.Components.Web],[Microsoft.AspNetCore.Components.Routing.NavLinkMatch,Microsoft.AspNetCore.Components.Web]]" Dynamic="Required All" />
+    </Assembly>
+    <Assembly Name="Microsoft.AspNetCore.Components">
+      <Type Name="Microsoft.AspNetCore.Components.Reflection.PropertySetter">
+        <Method Name="CallPropertySetter" Dynamic="Required All">
+          <GenericArgument Name="Microsoft.AspNetCore.Components.Routing.Router" />
+          <GenericArgument Name="Microsoft.AspNetCore.Components.EventCallback`1[Microsoft.AspNetCore.Components.Routing.NavigationContext]" />
+        </Method>
+        <Method Name="CallPropertySetter" Dynamic="Required All">
+          <GenericArgument Name="Microsoft.AspNetCore.Components.Routing.Router" />
+          <GenericArgument Name="System.Boolean,System.Private.CoreLib" />
+        </Method>
+        <Method Name="CallPropertySetter" Dynamic="Required All">
+          <GenericArgument Name="Microsoft.AspNetCore.Components.Routing.NavLink,Microsoft.AspNetCore.Components.Web" />
+          <GenericArgument Name="Microsoft.AspNetCore.Components.Routing.NavLinkMatch,Microsoft.AspNetCore.Components.Web" />
+        </Method>
+      </Type>
+    </Assembly>
+  </Application>
+</Directives>

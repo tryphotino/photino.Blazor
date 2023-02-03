@@ -2,8 +2,9 @@
 	
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<ApplicationIcon>favicon.ico</ApplicationIcon>
+		<PublishAot>true</PublishAot>
 	</PropertyGroup>
 
 
@@ -15,6 +16,12 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Photino.Blazor\Photino.Blazor.csproj" />
 	</ItemGroup>
+
+  <ItemGroup>
+    <RdXmlFile Include="rd.xml" />
+    <RdXmlFile Include="Microsoft.AspNetCore.Components.Web.rd.xml" />
+    <IlcArg Include="--nometadatablocking" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<Content Update="wwwroot\**">

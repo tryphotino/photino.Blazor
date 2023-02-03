@@ -6,10 +6,10 @@
 		<ApplicationIcon>favicon.ico</ApplicationIcon>
 	</PropertyGroup>
 
-
 	<ItemGroup>
 		<ProjectReference Include="..\..\Photino.Blazor\Photino.Blazor.csproj" />
 	</ItemGroup>
+
 
 	<ItemGroup>
 		<Content Update="wwwroot\**">

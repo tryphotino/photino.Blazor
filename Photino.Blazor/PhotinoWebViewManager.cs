@@ -66,6 +66,9 @@ namespace Photino.Blazor
             var localPath = (new Uri(url)).LocalPath;
             var hasFileExtension = localPath.LastIndexOf('.') > localPath.LastIndexOf('/');
 
+            //Remove parameters before attempting to retrieve the file. For example: http://localhost/_content/Blazorise/button.js?v=1.0.7.0
+            if (url.Contains('?')) url = url.Substring(0, url.IndexOf('?'));
+
             if (url.StartsWith(AppBaseUri, StringComparison.Ordinal)
                 && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage,
                     out var content, out var headers))
