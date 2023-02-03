@@ -34,17 +34,17 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="6.0.10" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="6.0.13" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
 	</ItemGroup>
 	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="7.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="7.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Photino.NET" Version="2.3.0" />
+		<PackageReference Include="Photino.NET" Version="2.3.2" />
 	</ItemGroup>
 
 </Project>
