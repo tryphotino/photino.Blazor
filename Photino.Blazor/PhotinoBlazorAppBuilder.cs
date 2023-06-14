@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 
 namespace Photino.Blazor
 {
@@ -12,6 +13,7 @@ namespace Photino.Blazor
         {
             RootComponents = new RootComponentList();
             Services = new ServiceCollection();
+            ConfigurationManager = new ConfigurationManager();
         }
 
         public static PhotinoBlazorAppBuilder CreateDefault(string[] args = default)
@@ -32,6 +34,8 @@ namespace Photino.Blazor
         public RootComponentList RootComponents { get; }
 
         public IServiceCollection Services { get; }
+
+        public ConfigurationManager ConfigurationManager { get; }
 
         public PhotinoBlazorApp Build(Action<IServiceProvider> serviceProviderOptions = null)
         {
