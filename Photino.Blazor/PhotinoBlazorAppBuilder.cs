@@ -23,7 +23,9 @@ namespace Photino.Blazor
             // var jsRuntime = DefaultWebAssemblyJSRuntime.Instance;
             var builder = new PhotinoBlazorAppBuilder();
             builder.Services.AddBlazorDesktop();
-            builder.Services.AddSingleton<IConfiguration>(builder.ConfigurationManager);
+
+            // register configuration as factory to make it dispose with the service provider
+            builder.Services.AddSingleton<IConfiguration>(_ => builder.ConfigurationManager);
 
             // Right now we don't have conventions or behaviors that are specific to this method
             // however, making this the default for the template allows us to add things like that
