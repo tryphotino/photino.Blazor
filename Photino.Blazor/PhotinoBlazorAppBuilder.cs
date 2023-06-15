@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Photino.Blazor
 {
@@ -14,6 +15,7 @@ namespace Photino.Blazor
             RootComponents = new RootComponentList();
             Services = new ServiceCollection();
             ConfigurationManager = new ConfigurationManager();
+            Logging = new LoggingBuilder(Services);
         }
 
         public static PhotinoBlazorAppBuilder CreateDefault(string[] args = default)
@@ -39,6 +41,8 @@ namespace Photino.Blazor
         public IServiceCollection Services { get; }
 
         public ConfigurationManager ConfigurationManager { get; }
+
+        public ILoggingBuilder Logging { get; }
 
         public PhotinoBlazorApp Build(Action<IServiceProvider> serviceProviderOptions = null)
         {
@@ -73,5 +77,15 @@ namespace Photino.Blazor
         {
             return components.GetEnumerator();
         }
+    }
+
+    class LoggingBuilder : ILoggingBuilder
+    {
+        public LoggingBuilder(IServiceCollection services)
+        {
+            Services = services;
+        }
+
+        public IServiceCollection Services { get; }
     }
 }
