@@ -44,9 +44,13 @@ namespace Photino.Blazor
 
         public PhotinoWebViewManager WindowManager { get; private set; }
 
-        public void Run()
+        /// <summary>
+        /// Runs the Blazor application.
+        /// </summary>
+        /// <param name="url">URL to application's main HTML file. This defaults to index.html.</param>
+        public void Run(string url = "/")
         {
-            WindowManager.Navigate("/");
+            WindowManager.Navigate(url);
             MainWindow.WaitForClose();
         }
 
