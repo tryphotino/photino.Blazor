@@ -34,7 +34,7 @@ namespace Photino.Blazor
 
             MainWindow.RegisterCustomSchemeHandler(PhotinoWebViewManager.BlazorAppScheme, HandleWebRequest);
 
-            foreach(var component in rootComponents)
+            foreach (var component in rootComponents)
             {
                 RootComponents.Add(component.Item1, component.Item2);
             }
@@ -46,7 +46,10 @@ namespace Photino.Blazor
 
         public void Run()
         {
-            WindowManager.Navigate("/");
+            if (string.IsNullOrWhiteSpace(MainWindow.StartUrl))
+                MainWindow.StartUrl = "/";
+
+            WindowManager.Navigate(MainWindow.StartUrl);
             MainWindow.WaitForClose();
         }
 
