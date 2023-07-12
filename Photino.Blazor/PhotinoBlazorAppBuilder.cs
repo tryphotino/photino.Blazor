@@ -57,6 +57,16 @@ namespace Photino.Blazor
             components.Add((typeof(TComponent), selector));
         }
 
+        public void Add(Type componentType, string selector)
+        {
+            if (!typeof(IComponent).IsAssignableFrom(componentType))
+            {
+                throw new ArgumentException("The component type must implement IComponent interface.");
+            }
+
+            components.Add((componentType, selector));
+        }
+
         public IEnumerator<(Type, string)> GetEnumerator()
         {
             return components.GetEnumerator();
