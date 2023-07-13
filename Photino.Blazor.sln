@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photino.Blazor.Sample", "Sa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photino.Blazor.NativeAOT", "Samples\Photino.Blazor.NativeAOT\Photino.Blazor.NativeAOT.csproj", "{86DCDD5A-F5E6-441F-B14C-609BF81401DA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Photino.Blazor.MultiWindowSample", "Samples\Photino.Blazor.MultiWindowSample\Photino.Blazor.MultiWindowSample.csproj", "{0CFCF49C-17F6-4BAB-B384-4A4E2E9847D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{86DCDD5A-F5E6-441F-B14C-609BF81401DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86DCDD5A-F5E6-441F-B14C-609BF81401DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86DCDD5A-F5E6-441F-B14C-609BF81401DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CFCF49C-17F6-4BAB-B384-4A4E2E9847D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CFCF49C-17F6-4BAB-B384-4A4E2E9847D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CFCF49C-17F6-4BAB-B384-4A4E2E9847D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CFCF49C-17F6-4BAB-B384-4A4E2E9847D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,6 +57,7 @@ Global
 		{C5847701-920B-44BB-899A-DAEB2AA8E023} = {1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}
 		{7C8371BF-E92B-437F-916E-53C0DADC2C54} = {1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}
 		{86DCDD5A-F5E6-441F-B14C-609BF81401DA} = {1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}
+		{0CFCF49C-17F6-4BAB-B384-4A4E2E9847D1} = {1F04F43F-CA2D-44E4-8984-4B8E4B875BD3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0639F843-32E3-4B90-BBB0-0F589AD82B9F}
