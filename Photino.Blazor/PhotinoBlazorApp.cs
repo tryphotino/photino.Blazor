@@ -26,6 +26,7 @@ namespace Photino.Blazor
 
             MainWindow
                 .SetTitle("Photino.Blazor App")
+                .SetUseOsDefaultSize(false)
                 .SetUseOsDefaultLocation(false)
                 .SetWidth(1000)
                 .SetHeight(900)
