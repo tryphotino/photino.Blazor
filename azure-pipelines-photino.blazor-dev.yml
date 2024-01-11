@@ -2,55 +2,54 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- debug
+    - debug
 
 variables:
-  versionprefix: 0.9.0
+    versionprefix: 0.9.0
 
 jobs:
-  - job: 'BuildPackageAndPublish'
+    - job: "BuildPackageAndPublish"
 
-    pool:
-      vmImage: windows-latest
+      pool:
+          vmImage: windows-latest
 
-    variables:
-      buildConfiguration: 'Debug'
+      variables:
+          buildConfiguration: "Debug"
 
-    steps:
-    - task: UseDotNet@2
-      displayName: 'Use .NET Core sdk'
-      inputs:
-        packageType: sdk
-        version: "7.0.x"
-        installationPath: $(Agent.ToolsDirectory)/dotnet
- 
-    - task: CmdLine@2
-      displayName: 'Add NuGet source'
-      inputs:
-        script: 'dotnet nuget add source https://pkgs.dev.azure.com/tryphotino/Photino.Native/_packaging/PhotinoPackages/nuget/v3/index.json -n DevOpsArtifacts'
+      steps:
+          - task: UseDotNet@2
+            displayName: "Use .NET 8 sdk"
+            inputs:
+                packageType: sdk
+                version: "8.0.x"
+                installationPath: $(Agent.ToolsDirectory)/dotnet
 
-    - task: NuGetAuthenticate@0
-      displayName: 'NuGet Authenticate'
-      
-    #Build .JS project - create desktop.blazor.js file used in Photino.Bloazor project
-    #- task: CmdLine@2
-    #  displayName: 'Build desktop.blazor.js'
-    #  inputs:
-    #    script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
+          - task: CmdLine@2
+            displayName: "Add NuGet source"
+            inputs:
+                script: "dotnet nuget add source https://pkgs.dev.azure.com/tryphotino/Photino.Native/_packaging/PhotinoPackages/nuget/v3/index.json -n DevOpsArtifacts"
 
-    #Build and Create NuGet package
-    - task: CmdLine@2
-      displayName: 'Build and Create NuGet package'
-      inputs:
-        script: 'dotnet pack Photino.Blazor/Photino.Blazor.csproj -c $(buildConfiguration) --include-symbols /p:Version=$(versionprefix)-dev-$(Build.BuildNumber) /p:PackageVersion=$(versionprefix)-dev-$(Build.BuildNumber)'
+          - task: NuGetAuthenticate@0
+            displayName: "NuGet Authenticate"
 
-    #Publish NuGet package to Artifacts
-    - task: NuGetCommand@2
-      displayName: 'NuGet push'
-      inputs:
-        command: push
-        feedsToUse: 'select'
-        publishVstsFeed: 'Photino.Native/PhotinoPackages'
-        packagesToPush: 'Photino.Blazor/bin/$(buildConfiguration)/*.nupkg'
-        allowPackageConflicts: true
+          #Build .JS project - create desktop.blazor.js file used in Photino.Bloazor project
+          #- task: CmdLine@2
+          #  displayName: 'Build desktop.blazor.js'
+          #  inputs:
+          #    script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
 
+          #Build and Create NuGet package
+          - task: CmdLine@2
+            displayName: "Build and Create NuGet package"
+            inputs:
+                script: "dotnet pack Photino.Blazor/Photino.Blazor.csproj -c $(buildConfiguration) --include-symbols /p:Version=$(versionprefix)-dev-$(Build.BuildNumber) /p:PackageVersion=$(versionprefix)-dev-$(Build.BuildNumber)"
+
+          #Publish NuGet package to Artifacts
+          - task: NuGetCommand@2
+            displayName: "NuGet push"
+            inputs:
+                command: push
+                feedsToUse: "select"
+                publishVstsFeed: "Photino.Native/PhotinoPackages"
+                packagesToPush: "Photino.Blazor/bin/$(buildConfiguration)/*.nupkg"
+                allowPackageConflicts: true

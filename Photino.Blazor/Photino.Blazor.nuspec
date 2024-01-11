@@ -8,9 +8,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/tryphotino/photino.Blazor</projectUrl>
-    <description>.NET 5 app that opens native OS windows hosting Blazor on Windows, Mac, and Linux</description>
+    <description>.NET 6/7/8 app that opens native OS windows hosting Blazor on Windows, Mac, and Linux</description>
   </metadata>
   <files>
-    <file src="bin/Release/net5.0/Photino.Blazor.dll" target="lib/net5.0" />
+    <file src="bin/Release/net6.0/Photino.Blazor.dll" target="lib/net6.0" />
+    <file src="bin/Release/net7.0/Photino.Blazor.dll" target="lib/net7.0" />
+    <file src="bin/Release/net8.0/Photino.Blazor.dll" target="lib/net8.0" />
   </files>
 </package>
