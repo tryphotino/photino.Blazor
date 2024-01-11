@@ -3,15 +3,15 @@
 	<PropertyGroup>
 		<Authors>TryPhotino</Authors>
 		<Company>TryPhotino</Company>
-		<Description>.NET 6 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</Description>
+		<Description>.NET 6/7/8 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</Description>
 		<GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);SetPackageVersion</GenerateNuspecDependsOn>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<PackageDescription>.NET 6 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</PackageDescription>
+		<PackageDescription>.NET 6/7/8 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</PackageDescription>
 		<PackageId>Photino.Blazor</PackageId>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/tryphotino/photino.Blazor</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/tryphotino/photino.Blazor</RepositoryUrl>
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
 		<Title>Photino.blazor</Title>
 		<PackageIcon>photino.png</PackageIcon>
 	</PropertyGroup>
@@ -34,17 +34,22 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="6.0.13" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="6.0.25" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
 	</ItemGroup>
 	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="7.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="7.0.14" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
 	</ItemGroup>
 	
+	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+	</ItemGroup>
+	
 	<ItemGroup>
-		<PackageReference Include="Photino.NET" Version="2.4.0" />
+		<PackageReference Include="Photino.NET" Version="2.6.0" />
 	</ItemGroup>
 
 </Project>
