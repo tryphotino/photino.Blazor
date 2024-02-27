@@ -1,8 +1,8 @@
 ## <span>NEXT PHOTINO FEATURES POLL</span>
 
-Hello Photino Community! Please take a moment to check out our Photino poll and vote on the next features to be implemented, here:
+Hello Photino Community! We have a new poll question, regarding where and how you use Photino:
 
-[PHOTINO POLL](https://github.com/tryphotino/photino.NET/discussions/117)
+[PHOTINO USAGE POLL](https://github.com/tryphotino/photino.NET/discussions/172)
 
 # Build native, cross-platform desktop apps with Blazor
 
