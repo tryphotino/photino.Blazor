@@ -8,6 +8,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using PhotinoNET;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -61,6 +62,14 @@ namespace Photino.Blazor
 
         public Stream HandleWebRequest(object sender, string schema, string url, out string contentType)
         {
+            // Intercept web requests to external websites (e.g., app://github.com) and open the link in the user's
+            // browser.
+            if (!url.Contains("localhost") && !url.Contains("0.0.0.0")) {
+                Process.Start(new ProcessStartInfo(url.Replace($"{schema}://", "http://")) { UseShellExecute = true });
+                contentType = default;
+                return null;
+            }
+
             // It would be better if we were told whether or not this is a navigation request, but
             // since we're not, guess.
             var localPath = (new Uri(url)).LocalPath;
