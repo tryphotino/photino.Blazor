@@ -1,80 +1,86 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Photino.Blazor
 {
-    public class PhotinoBlazorAppBuilder
-    {
-        internal PhotinoBlazorAppBuilder()
-        {
-            RootComponents = new RootComponentList();
-            Services = new ServiceCollection();
-        }
+	public class PhotinoBlazorAppBuilder
+	{
+		internal PhotinoBlazorAppBuilder()
+		{
+			RootComponents = new RootComponentList();
+			Services = new ServiceCollection();
+		}
 
-        public static PhotinoBlazorAppBuilder CreateDefault(string[] args = default)
-        {
-            // We don't use the args for anything right now, but we want to accept them
-            // here so that it shows up this way in the project templates.
-            // var jsRuntime = DefaultWebAssemblyJSRuntime.Instance;
-            var builder = new PhotinoBlazorAppBuilder();
-            builder.Services.AddBlazorDesktop();
+		public static PhotinoBlazorAppBuilder CreateDefault(string[] args = default)
+		{
+			return CreateDefault(null, args);
+		}
 
-            // Right now we don't have conventions or behaviors that are specific to this method
-            // however, making this the default for the template allows us to add things like that
-            // in the future, while giving `new BlazorDesktopHostBuilder` as an opt-out of opinionated
-            // settings.
-            return builder;
-        }
+		public static PhotinoBlazorAppBuilder CreateDefault(IFileProvider fileProvider, string[] args = default)
+		{
+			// We don't use the args for anything right now, but we want to accept them
+			// here so that it shows up this way in the project templates.
+			// var jsRuntime = DefaultWebAssemblyJSRuntime.Instance;
+			var builder = new PhotinoBlazorAppBuilder();
+			builder.Services.AddBlazorDesktop(fileProvider);
 
-        public RootComponentList RootComponents { get; }
+			// Right now we don't have conventions or behaviors that are specific to this method
+			// however, making this the default for the template allows us to add things like that
+			// in the future, while giving `new BlazorDesktopHostBuilder` as an opt-out of opinionated
+			// settings.
+			return builder;
+		}
 
-        public IServiceCollection Services { get; }
+		public RootComponentList RootComponents { get; }
 
-        public PhotinoBlazorApp Build(Action<IServiceProvider> serviceProviderOptions = null)
-        {
-            // register root components with DI container
-            // Services.AddSingleton(RootComponents);
+		public IServiceCollection Services { get; }
 
-            var sp = Services.BuildServiceProvider();
-            var app = sp.GetRequiredService<PhotinoBlazorApp>();
+		public PhotinoBlazorApp Build(Action<IServiceProvider> serviceProviderOptions = null)
+		{
+			// register root components with DI container
+			// Services.AddSingleton(RootComponents);
 
-            serviceProviderOptions?.Invoke(sp);
+			var sp = Services.BuildServiceProvider();
+			var app = sp.GetRequiredService<PhotinoBlazorApp>();
 
-            app.Initialize(sp, RootComponents);
-            return app;
-        }
-    }
+			serviceProviderOptions?.Invoke(sp);
 
-    public class RootComponentList : IEnumerable<(Type, string)>
-    {
-        private readonly List<(Type componentType, string domElementSelector)> components = new List<(Type componentType, string domElementSelector)>();
+			app.Initialize(sp, RootComponents);
+			return app;
+		}
+	}
 
-        public void Add<TComponent>(string selector) where TComponent : IComponent
-        {
-            components.Add((typeof(TComponent), selector));
-        }
+	public class RootComponentList : IEnumerable<(Type, string)>
+	{
+		private readonly List<(Type componentType, string domElementSelector)> components = new List<(Type componentType, string domElementSelector)>();
 
-        public void Add(Type componentType, string selector)
-        {
-            if (!typeof(IComponent).IsAssignableFrom(componentType))
-            {
-                throw new ArgumentException("The component type must implement IComponent interface.");
-            }
+		public void Add<TComponent>(string selector) where TComponent : IComponent
+		{
+			components.Add((typeof(TComponent), selector));
+		}
 
-            components.Add((componentType, selector));
-        }
+		public void Add(Type componentType, string selector)
+		{
+			if (!typeof(IComponent).IsAssignableFrom(componentType))
+			{
+				throw new ArgumentException("The component type must implement IComponent interface.");
+			}
 
-        public IEnumerator<(Type, string)> GetEnumerator()
-        {
-            return components.GetEnumerator();
-        }
+			components.Add((componentType, selector));
+		}
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return components.GetEnumerator();
-        }
-    }
+		public IEnumerator<(Type, string)> GetEnumerator()
+		{
+			return components.GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return components.GetEnumerator();
+		}
+	}
 }
