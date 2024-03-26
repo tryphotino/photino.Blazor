@@ -11,7 +11,7 @@ namespace Photino.Blazor
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddBlazorDesktop(this IServiceCollection services)
+        public static IServiceCollection AddBlazorDesktop(this IServiceCollection services, IFileProvider fileProvider = null)
         {
             services
                 .AddOptions<PhotinoBlazorAppConfiguration>()
@@ -37,8 +37,15 @@ namespace Photino.Blazor
                 .AddSingleton<Dispatcher, PhotinoDispatcher>()
                 .AddSingleton<IFileProvider>(_ =>
                 {
-                    var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
-                    return new PhysicalFileProvider(root);
+                    if (fileProvider is null)
+                    {
+                        var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
+                        return new PhysicalFileProvider(root);
+                    }
+                    else
+                    {
+                        return fileProvider;
+                    }
                 })
                 .AddSingleton<JSComponentConfigurationStore>()
                 .AddSingleton<PhotinoBlazorApp>()

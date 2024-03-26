@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,11 +17,16 @@ namespace Photino.Blazor
 
         public static PhotinoBlazorAppBuilder CreateDefault(string[] args = default)
         {
+            return CreateDefault(null, args);
+        }
+
+        public static PhotinoBlazorAppBuilder CreateDefault(IFileProvider fileProvider, string[] args = default)
+        {
             // We don't use the args for anything right now, but we want to accept them
             // here so that it shows up this way in the project templates.
             // var jsRuntime = DefaultWebAssemblyJSRuntime.Instance;
             var builder = new PhotinoBlazorAppBuilder();
-            builder.Services.AddBlazorDesktop();
+            builder.Services.AddBlazorDesktop(fileProvider);
 
             // Right now we don't have conventions or behaviors that are specific to this method
             // however, making this the default for the template allows us to add things like that
