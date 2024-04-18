@@ -1,6 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<Authors>TryPhotino</Authors>
 		<Company>TryPhotino</Company>
 		<Description>.NET 6/7/8 app that opens native OS windows hosting Blazor UI on Windows, Mac, and Linux</Description>
@@ -44,12 +50,12 @@
 	</ItemGroup>
 	
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="8.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="8.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Photino.NET" Version="0.9.0-dev-20240209.1" />
+		<PackageReference Include="Photino.NET" Version="2.6.0" />
 	</ItemGroup>
 
 </Project>
