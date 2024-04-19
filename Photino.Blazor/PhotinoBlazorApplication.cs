@@ -3,7 +3,7 @@ using PhotinoNET;
 
 namespace Photino.Blazor;
 
-public class PhotinoBlazorApplication : IPhotinoApplication
+public class PhotinoBlazorApplication : IPhotinoBlazorApplication
 {
     public PhotinoWindow MainWindow { get; private set; } = default!;
 
@@ -60,7 +60,7 @@ public class PhotinoBlazorApplication : IPhotinoApplication
         .SetTop(100);
 }
 
-public interface IPhotinoApplication
+public interface IPhotinoBlazorApplication
 {
     PhotinoWindow MainWindow { get; }
     BlazorWindowRootComponents RootComponents { get; }
@@ -68,5 +68,6 @@ public interface IPhotinoApplication
     PhotinoWebViewManager WindowManager { get; }
 
     Stream HandleWebRequest(object? sender, string? scheme, string url, out string contentType);
+
     void Run();
 }

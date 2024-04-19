@@ -1,7 +1,11 @@
 ﻿@page "/"
+@using Microsoft.Extensions.Hosting
+@inject IHostEnvironment Environment
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+@Environment.EnvironmentName
 
 <SurveyPrompt Title="How is Blazor working for you?" />
