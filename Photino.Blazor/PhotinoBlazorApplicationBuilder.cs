@@ -43,7 +43,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
     private IConfiguration? _hostConfiguration;
     private HostingEnvironment? _hostingEnvironment;
     private IServiceFactoryAdapter _serviceProviderFactory;
-    private Func<IServiceProvider, IFileProvider> _configureFileProvider;
+    private Func<HostBuilderContext, IServiceProvider, IFileProvider> _configureFileProvider;
 
     /// <summary>
     /// Initializes a new instance of <see cref="HostBuilder"/>.
@@ -51,7 +51,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
     public PhotinoBlazorApplicationBuilder()
     {
         _serviceProviderFactory = new ServiceFactoryAdapter<IServiceCollection>(new DefaultServiceProviderFactory());
-        _configureFileProvider = sp =>
+        _configureFileProvider = (ctx, sp) =>
         {
             var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
             return new PhysicalFileProvider(root);
@@ -128,8 +128,10 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
         return this;
     }
 
-    public IHostBuilder ConfigureFileProvider(Func<IServiceProvider, IFileProvider> configureDelegate)
+    public IHostBuilder ConfigureFileProvider(Func<HostBuilderContext, IServiceProvider, IFileProvider> configureDelegate)
     {
+        ThrowHelper.ThrowIfNull(configureDelegate);
+
         _configureFileProvider = configureDelegate;
         return this;
     }
@@ -148,6 +150,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
         _configureHostConfigActions.Add(configureDelegate);
         return this;
     }
+
     /// <summary>
     /// Adds services to the container. This can be called multiple times and the results will be additive.
     /// </summary>
@@ -372,6 +375,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
     {
         (_hostingEnvironment, _defaultProvider) = CreateHostingEnvironment(_hostConfiguration!); // TODO-NULLABLE: https://github.com/dotnet/csharplang/discussions/5778. The same pattern exists below as well.
     }
+
     [MemberNotNull(nameof(_appServices))]
     private void InitializeServiceProvider()
     {
@@ -397,7 +401,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
             return new BlazorWindowRootComponents(manager, store);
         });
 
-        services.AddSingleton(_configureFileProvider);
+        services.AddSingleton(sp => _configureFileProvider.Invoke(_hostBuilderContext!, sp));
 
         services.AddSingleton<Dispatcher, PhotinoDispatcher>();
         services.AddSingleton<JSComponentConfigurationStore>();

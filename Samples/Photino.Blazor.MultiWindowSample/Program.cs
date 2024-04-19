@@ -8,7 +8,7 @@ namespace Photino.Blazor.MultiWindowSample;
 
 internal class Program
 {
-    private static readonly List<PhotinoWindow> _windows = new();
+    private static readonly List<PhotinoWindow> _windows = [];
 
     private static void CloseAllWindows()
     {
@@ -72,17 +72,10 @@ internal class Program
         );
     }
 
-    private class WindowCreationArgs
+    private class WindowCreationArgs(Type rootComponentType, string title, Uri htmlPath)
     {
-        public WindowCreationArgs(Type rootComponentType, string title, Uri htmlPath)
-        {
-            RootComponentType = rootComponentType;
-            Title = title;
-            HtmlPath = htmlPath;
-        }
-
-        public Uri HtmlPath { get; }
-        public Type RootComponentType { get; }
-        public string Title { get; }
+        public Uri HtmlPath { get; } = htmlPath;
+        public Type RootComponentType { get; } = rootComponentType;
+        public string Title { get; } = title;
     }
 }

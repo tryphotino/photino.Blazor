@@ -179,6 +179,9 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
             throw new InvalidOperationException("BuildCalled");
         }
 
+        // Adds the file provider as the last service to ensure the non-nullability
+        Services.AddSingleton(_configureFileProvider);
+
         _hostBuilt = true;
 
         using DiagnosticListener diagnosticListener = HostBuilder.LogHostBuilding(this);
@@ -275,8 +278,6 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
 
             return new BlazorWindowRootComponents(manager, store);
         });
-
-        Services.AddSingleton(_configureFileProvider);
 
         Services.AddSingleton<Dispatcher, PhotinoDispatcher>();
         Services.AddSingleton<JSComponentConfigurationStore>();
