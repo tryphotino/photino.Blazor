@@ -27,6 +27,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
     private IServiceProvider? _appServices;
     private Action<object> _configureContainer = _ => { };
     private Func<IServiceProvider> _createServiceProvider;
+    private Func<IServiceProvider, IFileProvider> _configureFileProvider;
     private HostBuilderAdapter? _hostBuilderAdapter;
     private bool _hostBuilt;
 
@@ -111,6 +112,12 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
             _configureContainer(Services);
             return serviceProviderOptions is null ? Services.BuildServiceProvider() : Services.BuildServiceProvider(serviceProviderOptions);
         };
+
+        _configureFileProvider = (sp) =>
+        {
+            var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
+            return new PhysicalFileProvider(root);
+        };
     }
 
     internal PhotinoBlazorApplicationBuilder(HostApplicationBuilderSettings? settings, bool empty)
@@ -128,6 +135,12 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
             // Otherwise, this no-ops.
             _configureContainer(Services);
             return Services.BuildServiceProvider();
+        };
+
+        _configureFileProvider = (sp) =>
+        {
+            var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
+            return new PhysicalFileProvider(root);
         };
     }
 
@@ -200,6 +213,8 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
         _configureContainer = containerBuilder => configure?.Invoke((TContainerBuilder)containerBuilder);
     }
 
+    public void ConfigureFileProvider(Func<IServiceProvider, IFileProvider> configure) => _configureFileProvider = configure;
+
     private void Initialize(HostApplicationBuilderSettings settings, out HostBuilderContext hostBuilderContext, out IHostEnvironment environment, out LoggingBuilder logging, out MetricsBuilder metrics)
     {
         // Command line args are added even when settings.DisableDefaults == true. If the caller didn't want settings.Args applied,
@@ -261,11 +276,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
             return new BlazorWindowRootComponents(manager, store);
         });
 
-        Services.AddSingleton<IFileProvider>(sp =>
-        {
-            var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
-            return new PhysicalFileProvider(root);
-        });
+        Services.AddSingleton(_configureFileProvider);
 
         Services.AddSingleton<Dispatcher, PhotinoDispatcher>();
         Services.AddSingleton<JSComponentConfigurationStore>();

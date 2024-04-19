@@ -43,6 +43,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
     private IConfiguration? _hostConfiguration;
     private HostingEnvironment? _hostingEnvironment;
     private IServiceFactoryAdapter _serviceProviderFactory;
+    private Func<IServiceProvider, IFileProvider> _configureFileProvider;
 
     /// <summary>
     /// Initializes a new instance of <see cref="HostBuilder"/>.
@@ -50,6 +51,11 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
     public PhotinoBlazorApplicationBuilder()
     {
         _serviceProviderFactory = new ServiceFactoryAdapter<IServiceCollection>(new DefaultServiceProviderFactory());
+        _configureFileProvider = sp =>
+        {
+            var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
+            return new PhysicalFileProvider(root);
+        };
     }
 
     /// <summary>
@@ -119,6 +125,12 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
         ThrowHelper.ThrowIfNull(configureDelegate);
 
         _configureContainerActions.Add(new ConfigureContainerAdapter<TContainerBuilder>(configureDelegate));
+        return this;
+    }
+
+    public IHostBuilder ConfigureFileProvider(Func<IServiceProvider, IFileProvider> configureDelegate)
+    {
+        _configureFileProvider = configureDelegate;
         return this;
     }
 
@@ -385,11 +397,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
             return new BlazorWindowRootComponents(manager, store);
         });
 
-        services.AddSingleton<IFileProvider>(sp =>
-        {
-            var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
-            return new PhysicalFileProvider(root);
-        });
+        services.AddSingleton(_configureFileProvider);
 
         services.AddSingleton<Dispatcher, PhotinoDispatcher>();
         services.AddSingleton<JSComponentConfigurationStore>();
