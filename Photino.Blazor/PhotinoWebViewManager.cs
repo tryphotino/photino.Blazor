@@ -87,7 +87,7 @@ public class PhotinoWebViewManager : WebViewManager
             Thread.Sleep(200);
     }
 
-    async Task MessagePump()
+    private async Task MessagePump()
     {
         var reader = _channel.Reader;
         try

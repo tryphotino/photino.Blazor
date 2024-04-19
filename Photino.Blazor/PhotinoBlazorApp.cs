@@ -20,12 +20,14 @@ public class PhotinoBlazorApp
     public PhotinoWebViewManager WindowManager { get; private set; } = default!;
 
     public Stream HandleWebRequest(object? sender, string? scheme, string url, out string contentType)
-            => WindowManager.HandleWebRequest(sender, scheme, url, out contentType!)!;
+        => WindowManager.HandleWebRequest(sender, scheme, url, out contentType!)!;
 
     public void Run()
     {
         if (string.IsNullOrWhiteSpace(MainWindow.StartUrl))
+        {
             MainWindow.StartUrl = "/";
+        }
 
         WindowManager.Navigate(MainWindow.StartUrl);
         MainWindow.WaitForClose();
@@ -38,14 +40,7 @@ public class PhotinoBlazorApp
         MainWindow = Services.GetRequiredService<PhotinoWindow>();
         WindowManager = Services.GetRequiredService<PhotinoWebViewManager>();
 
-        MainWindow
-            .SetTitle("Photino.Blazor App")
-            .SetUseOsDefaultSize(false)
-            .SetUseOsDefaultLocation(false)
-            .SetWidth(1000)
-            .SetHeight(900)
-            .SetLeft(450)
-            .SetTop(100);
+        ConfigureDefaults();
 
         MainWindow.RegisterCustomSchemeHandler(PhotinoWebViewManager.BlazorAppScheme, HandleWebRequest);
 
@@ -54,4 +49,13 @@ public class PhotinoBlazorApp
             RootComponents.Add(component.Item1, component.Item2);
         }
     }
+
+    private void ConfigureDefaults() => MainWindow
+        .SetTitle("Photino.Blazor App")
+        .SetUseOsDefaultSize(false)
+        .SetUseOsDefaultLocation(false)
+        .SetWidth(1000)
+        .SetHeight(900)
+        .SetLeft(450)
+        .SetTop(100);
 }

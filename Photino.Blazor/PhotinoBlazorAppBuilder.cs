@@ -13,6 +13,10 @@ public class PhotinoBlazorAppBuilder
         Services = new ServiceCollection();
     }
 
+    public RootComponentList RootComponents { get; }
+
+    public IServiceCollection Services { get; }
+
     public static PhotinoBlazorAppBuilder CreateDefault(string[] args = default!)
     {
         return CreateDefault(default!, args);
@@ -32,10 +36,6 @@ public class PhotinoBlazorAppBuilder
         // settings.
         return builder;
     }
-
-    public RootComponentList RootComponents { get; }
-
-    public IServiceCollection Services { get; }
 
     public PhotinoBlazorApp Build(Action<IServiceProvider> serviceProviderOptions = null!)
     {
