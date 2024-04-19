@@ -28,7 +28,7 @@ internal class Program
             return;
         }
 
-        var builder = PhotinoBlazorApplicationBuilder.CreateApplicationBuilder(args);
+        var builder = PhotinoBlazorAppBuilder.CreateApplicationBuilder(args);
 
         // register services
         builder.Services.AddLogging();

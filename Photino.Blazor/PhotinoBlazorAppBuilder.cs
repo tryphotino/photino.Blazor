@@ -24,7 +24,7 @@ namespace Photino.Blazor;
 /// <summary>
 /// A program initialization utility.
 /// </summary>
-public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
+public partial class PhotinoBlazorAppBuilder : IHostBuilder
 {
     private const string HostBuildingDiagnosticListenerName = "Microsoft.Extensions.Hosting";
     private const string HostBuildingEventName = "HostBuilding";
@@ -48,7 +48,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
     /// <summary>
     /// Initializes a new instance of <see cref="HostBuilder"/>.
     /// </summary>
-    public PhotinoBlazorApplicationBuilder()
+    public PhotinoBlazorAppBuilder()
     {
         _serviceProviderFactory = new ServiceFactoryAdapter<IServiceCollection>(new DefaultServiceProviderFactory());
         _configureFileProvider = (ctx, sp) =>
@@ -70,7 +70,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
     /// </summary>
     /// <returns>An initialized <see cref="IHost"/></returns>
     /// <remarks>Adds basic services to the host such as application lifetime, host environment, and logging.</remarks>
-    public IPhotinoBlazorApplication Build()
+    public IPhotinoBlazorApp Build()
     {
         if (_hostBuilt)
         {
@@ -88,7 +88,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
         InitializeAppConfiguration();
         InitializeServiceProvider();
 
-        var app = _appServices.GetRequiredService<PhotinoBlazorApplication>();
+        var app = _appServices.GetRequiredService<PhotinoBlazorApp>();
         app.Initialize(_appServices, RootComponents);
 
         // NOTE: I dont fully understand the usage of this method, so for now I'll leave this here
@@ -381,7 +381,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
     {
         var services = new ServiceCollection();
 
-        services.AddOptions<PhotinoBlazorApplicationConfiguration>().Configure(opts =>
+        services.AddOptions<PhotinoBlazorAppConfiguration>().Configure(opts =>
         {
             opts.AppBaseUri = new Uri(PhotinoWebViewManager.AppBaseUri);
             opts.HostPage = "index.html";
@@ -405,7 +405,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
 
         services.AddSingleton<Dispatcher, PhotinoDispatcher>();
         services.AddSingleton<JSComponentConfigurationStore>();
-        services.AddSingleton<PhotinoBlazorApplication>();
+        services.AddSingleton<PhotinoBlazorApp>();
         services.AddSingleton<PhotinoHttpHandler>();
         services.AddSingleton<PhotinoSynchronizationContext>();
         services.AddSingleton<PhotinoWebViewManager>();
@@ -436,7 +436,7 @@ public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
     }
 }
 
-public sealed partial class PhotinoBlazorApplicationBuilder
+public sealed partial class PhotinoBlazorAppBuilder
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="HostBuilder"/> class with pre-configured defaults.
@@ -454,7 +454,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder
     ///   </list>
     /// </remarks>
     /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
-    public static PhotinoBlazorApplicationBuilder CreateDefaultBuilder() =>
+    public static PhotinoBlazorAppBuilder CreateDefaultBuilder() =>
         CreateDefaultBuilder(args: null);
 
     /// <summary>
@@ -476,10 +476,10 @@ public sealed partial class PhotinoBlazorApplicationBuilder
     /// </remarks>
     /// <param name="args">The command line args.</param>
     /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
-    public static PhotinoBlazorApplicationBuilder CreateDefaultBuilder(string[]? args)
+    public static PhotinoBlazorAppBuilder CreateDefaultBuilder(string[]? args)
     {
-        PhotinoBlazorApplicationBuilder builder = new();
-        return (PhotinoBlazorApplicationBuilder)builder.ConfigureDefaults(args);
+        PhotinoBlazorAppBuilder builder = new();
+        return (PhotinoBlazorAppBuilder)builder.ConfigureDefaults(args);
     }
 }
 

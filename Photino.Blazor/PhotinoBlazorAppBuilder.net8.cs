@@ -16,7 +16,7 @@ namespace Photino.Blazor;
 
 #pragma warning disable CS0436
 
-public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBuilder
+public sealed partial class PhotinoBlazorAppBuilder : IHostApplicationBuilder
 {
     private readonly IHostEnvironment _environment;
     private readonly HostBuilderContext _hostBuilderContext;
@@ -48,7 +48,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
     ///     <item><description>enables scope validation on the dependency injection container when <see cref="IHostEnvironment.EnvironmentName"/> is 'Development'</description></item>
     ///   </list>
     /// </remarks>
-    public PhotinoBlazorApplicationBuilder()
+    public PhotinoBlazorAppBuilder()
         : this(args: null)
     {
     }
@@ -71,7 +71,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
     ///   </list>
     /// </remarks>
     /// <param name="args">The command line args.</param>
-    public PhotinoBlazorApplicationBuilder(string[]? args)
+    public PhotinoBlazorAppBuilder(string[]? args)
         : this(new HostApplicationBuilderSettings { Args = args })
     {
     }
@@ -80,7 +80,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
     /// Initializes a new instance of the <see cref="HostApplicationBuilder"/>.
     /// </summary>
     /// <param name="settings">Settings controlling initial configuration and whether default settings should be used.</param>
-    public PhotinoBlazorApplicationBuilder(HostApplicationBuilderSettings? settings)
+    public PhotinoBlazorAppBuilder(HostApplicationBuilderSettings? settings)
     {
         settings ??= new HostApplicationBuilderSettings();
         Configuration = settings.Configuration ?? new ConfigurationManager();
@@ -120,7 +120,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
         };
     }
 
-    internal PhotinoBlazorApplicationBuilder(HostApplicationBuilderSettings? settings, bool empty)
+    internal PhotinoBlazorAppBuilder(HostApplicationBuilderSettings? settings, bool empty)
     {
         Debug.Assert(empty, "should only be called with empty: true");
 
@@ -172,7 +172,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
     /// Build the host. This can only be called once.
     /// </summary>
     /// <returns>An initialized <see cref="IHost"/>.</returns>
-    public IPhotinoBlazorApplication Build()
+    public IPhotinoBlazorApp Build()
     {
         if (_hostBuilt)
         {
@@ -193,7 +193,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
         // Prevent further modification of the service collection now that the provider is built.
         _serviceCollection.MakeReadOnly();
 
-        var app = _appServices.GetRequiredService<PhotinoBlazorApplication>();
+        var app = _appServices.GetRequiredService<PhotinoBlazorApp>();
         app.Initialize(_appServices, RootComponents);
 
         // NOTE: I dont fully understand the usage of this method, so for now I'll leave this here
@@ -259,7 +259,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
 
         environment = hostingEnvironment;
 
-        Services.AddOptions<PhotinoBlazorApplicationConfiguration>().Configure(opts =>
+        Services.AddOptions<PhotinoBlazorAppConfiguration>().Configure(opts =>
         {
             opts.AppBaseUri = new Uri(PhotinoWebViewManager.AppBaseUri);
             opts.HostPage = "index.html";
@@ -281,7 +281,7 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
 
         Services.AddSingleton<Dispatcher, PhotinoDispatcher>();
         Services.AddSingleton<JSComponentConfigurationStore>();
-        Services.AddSingleton<PhotinoBlazorApplication>();
+        Services.AddSingleton<PhotinoBlazorApp>();
         Services.AddSingleton<PhotinoHttpHandler>();
         Services.AddSingleton<PhotinoSynchronizationContext>();
         Services.AddSingleton<PhotinoWebViewManager>();
@@ -303,13 +303,13 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
     // Lazily allocate HostBuilderAdapter so the allocations can be avoided if there's nothing observing the events.
     internal IHostBuilder AsHostBuilder() => _hostBuilderAdapter ??= new HostBuilderAdapter(this);
 
-    private sealed class HostBuilderAdapter(PhotinoBlazorApplicationBuilder hostApplicationBuilder) : IHostBuilder
+    private sealed class HostBuilderAdapter(PhotinoBlazorAppBuilder hostApplicationBuilder) : IHostBuilder
     {
         private readonly List<Action<HostBuilderContext, IConfigurationBuilder>> _configureAppConfigActions = [];
         private readonly List<IConfigureContainerAdapter> _configureContainerActions = [];
         private readonly List<Action<IConfigurationBuilder>> _configureHostConfigActions = [];
         private readonly List<Action<HostBuilderContext, IServiceCollection>> _configureServicesActions = [];
-        private readonly PhotinoBlazorApplicationBuilder _hostApplicationBuilder = hostApplicationBuilder;
+        private readonly PhotinoBlazorAppBuilder _hostApplicationBuilder = hostApplicationBuilder;
         private IServiceFactoryAdapter? _serviceProviderFactory;
 
         public IDictionary<object, object> Properties => _hostApplicationBuilder._hostBuilderContext.Properties;
@@ -445,9 +445,9 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
     }
 }
 
-public sealed partial class PhotinoBlazorApplicationBuilder
+public sealed partial class PhotinoBlazorAppBuilder
 {
-    /// Initializes a new instance of the <see cref="PhotinoBlazorApplicationBuilder"/> class with pre-configured defaults.
+    /// Initializes a new instance of the <see cref="PhotinoBlazorAppBuilder"/> class with pre-configured defaults.
     /// </summary>
     /// <remarks>
     ///   The following defaults are applied to the returned <see cref="PhotinoBlazorApplicationBuilder"/>:
@@ -462,13 +462,13 @@ public sealed partial class PhotinoBlazorApplicationBuilder
     ///   </list>
     /// </remarks>
     /// <returns>The initialized <see cref="PhotinoBlazorApplicationBuilder"/>.</returns>
-    public static PhotinoBlazorApplicationBuilder CreateApplicationBuilder() => new();
+    public static PhotinoBlazorAppBuilder CreateApplicationBuilder() => new();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PhotinoBlazorApplicationBuilder"/> class with pre-configured defaults.
+    /// Initializes a new instance of the <see cref="PhotinoBlazorAppBuilder"/> class with pre-configured defaults.
     /// </summary>
     /// <remarks>
-    ///   The following defaults are applied to the returned <see cref="PhotinoBlazorApplicationBuilder"/>:
+    ///   The following defaults are applied to the returned <see cref="PhotinoBlazorAppBuilder"/>:
     ///   <list type="bullet">
     ///     <item><description>set the <see cref="IHostEnvironment.ContentRootPath"/> to the result of <see cref="Directory.GetCurrentDirectory()"/></description></item>
     ///     <item><description>load host <see cref="IConfiguration"/> from "DOTNET_" prefixed environment variables</description></item>
@@ -482,12 +482,12 @@ public sealed partial class PhotinoBlazorApplicationBuilder
     ///   </list>
     /// </remarks>
     /// <param name="args">The command line args.</param>
-    /// <returns>The initialized <see cref="PhotinoBlazorApplicationBuilder"/>.</returns>
-    public static PhotinoBlazorApplicationBuilder CreateApplicationBuilder(string[]? args) => new(args);
+    /// <returns>The initialized <see cref="PhotinoBlazorAppBuilder"/>.</returns>
+    public static PhotinoBlazorAppBuilder CreateApplicationBuilder(string[]? args) => new(args);
 
     /// <inheritdoc cref="CreateApplicationBuilder()" />
-    /// <param name="settings">Controls the initial configuration and other settings for constructing the <see cref="PhotinoBlazorApplicationBuilder"/>.</param>
-    public static PhotinoBlazorApplicationBuilder CreateApplicationBuilder(HostApplicationBuilderSettings? settings) => new(settings);
+    /// <param name="settings">Controls the initial configuration and other settings for constructing the <see cref="PhotinoBlazorAppBuilder"/>.</param>
+    public static PhotinoBlazorAppBuilder CreateApplicationBuilder(HostApplicationBuilderSettings? settings) => new(settings);
 }
 
 #pragma warning restore CS0436

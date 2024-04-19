@@ -28,7 +28,7 @@ public class PhotinoWebViewManager : WebViewManager
     public static readonly string AppBaseUri = $"{BlazorAppScheme}://localhost/";
 
     public PhotinoWebViewManager(PhotinoWindow window, IServiceProvider provider, Dispatcher dispatcher,
-        IFileProvider fileProvider, JSComponentConfigurationStore jsComponents, IOptions<PhotinoBlazorApplicationConfiguration> config)
+        IFileProvider fileProvider, JSComponentConfigurationStore jsComponents, IOptions<PhotinoBlazorAppConfiguration> config)
         : base(provider, dispatcher, config.Value.AppBaseUri, fileProvider, jsComponents, config.Value.HostPage)
     {
         _window = window ?? throw new ArgumentNullException(nameof(window));

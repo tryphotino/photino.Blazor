@@ -12,7 +12,7 @@ internal class Program
     {
 
 #if NET8_0
-        var builder = PhotinoBlazorApplicationBuilder.CreateApplicationBuilder(args);
+        var builder = PhotinoBlazorAppBuilder.CreateApplicationBuilder(args);
 #else
         var builder = PhotinoBlazorApplicationBuilder.CreateDefaultBuilder(args);
 #endif

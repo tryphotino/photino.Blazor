@@ -180,7 +180,7 @@ public partial class HostBuilder : IHostBuilder
         return diagnosticListener;
     }
 
-    internal static DiagnosticListener LogHostBuilding(PhotinoBlazorApplicationBuilder hostApplicationBuilder)
+    internal static DiagnosticListener LogHostBuilding(PhotinoBlazorAppBuilder hostApplicationBuilder)
     {
         var diagnosticListener = new DiagnosticListener(HostBuildingDiagnosticListenerName);
 
