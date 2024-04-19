@@ -28,15 +28,15 @@ internal class Program
             return;
         }
 
-        var appBuilder = PhotinoBlazorApplicationBuilder.CreateApplicationBuilder(args);
+        var builder = PhotinoBlazorApplicationBuilder.CreateApplicationBuilder(args);
 
         // register services
-        appBuilder.Services.AddLogging();
+        builder.Services.AddLogging();
 
         // register root component and selector
-        appBuilder.RootComponents.Add(windowCreationArgs.RootComponentType, "app");
+        builder.RootComponents.Add(windowCreationArgs.RootComponentType, "app");
 
-        var app = appBuilder.Build();
+        var app = builder.Build();
 
         // customize window
         _windows.Add(

@@ -9,14 +9,14 @@ internal class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        var appBuilder = PhotinoBlazorApplicationBuilder.CreateApplicationBuilder(args);
-        appBuilder.Services
+        var builder = PhotinoBlazorApplicationBuilder.CreateApplicationBuilder(args);
+        builder.Services
             .AddLogging();
 
         // register root component
-        appBuilder.RootComponents.Add<App>("app");
+        builder.RootComponents.Add<App>("app");
 
-        var app = appBuilder.Build();
+        var app = builder.Build();
 
         // customize window
         app.MainWindow
