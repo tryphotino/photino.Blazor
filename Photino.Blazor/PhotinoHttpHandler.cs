@@ -5,16 +5,16 @@ namespace Photino.Blazor;
 
 public class PhotinoHttpHandler : DelegatingHandler
 {
-    private readonly PhotinoBlazorApp app;
+    private readonly PhotinoBlazorApplication app;
 
     //use this constructor if a handler is registered in DI to inject dependencies
-    public PhotinoHttpHandler(PhotinoBlazorApp app) : this(app, default)
+    public PhotinoHttpHandler(PhotinoBlazorApplication app) : this(app, default)
     {
     }
 
     //Use this constructor if a handler is created manually.
     //Otherwise, use DelegatingHandler.InnerHandler public property to set the next handler.
-    public PhotinoHttpHandler(PhotinoBlazorApp app, HttpMessageHandler? innerHandler)
+    public PhotinoHttpHandler(PhotinoBlazorApplication app, HttpMessageHandler? innerHandler)
     {
         this.app = app;
 

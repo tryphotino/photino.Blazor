@@ -1,6 +1,6 @@
 namespace Photino.Blazor;
 
-public class PhotinoBlazorAppConfiguration
+public class PhotinoBlazorApplicationConfiguration
 {
     public Uri AppBaseUri { get; set; } = default!;
 
