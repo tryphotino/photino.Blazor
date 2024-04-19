@@ -1,4 +1,6 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+﻿#if NET8_0
+
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Microsoft.Extensions.Configuration;
@@ -191,12 +193,7 @@ public partial class HostBuilder : IHostBuilder
     }
 
     // Remove when https://github.com/dotnet/runtime/pull/78532 is merged and consumed by the used SDK.
-#if NET7_0
-    [UnconditionalSuppressMessage("AOT", "IL3050:RequiresDynamicCode",
-        Justification = "DiagnosticSource is used here to pass objects in-memory to code using HostFactoryResolver. This won't require creating new generic types.")]
-#endif
-    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026:UnrecognizedReflectionPattern",
-        Justification = "The values being passed into Write are being consumed by the application already.")]
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026:UnrecognizedReflectionPattern", Justification = "The values being passed into Write are being consumed by the application already.")]
     private static void Write<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
         DiagnosticListener diagnosticSource,
         string name,
@@ -379,10 +376,7 @@ public partial class HostBuilder : IHostBuilder
 
         return host;
     }
-}
 
-public partial class HostBuilder
-{
     private static void AddLifetime(IServiceCollection services)
     {
         if (!OperatingSystem.IsAndroid() && !OperatingSystem.IsBrowser() && !OperatingSystem.IsIOS() && !OperatingSystem.IsTvOS())
@@ -394,6 +388,8 @@ public partial class HostBuilder
             services.AddSingleton<IHostLifetime, NullLifetime>();
         }
     }
-}   
+}
 
 #pragma warning restore CS0436 // Il tipo è in conflitto con il tipo importato
+
+#endif

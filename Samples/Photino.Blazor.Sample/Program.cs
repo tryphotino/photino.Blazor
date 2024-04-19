@@ -8,10 +8,18 @@ internal class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        var builder = PhotinoBlazorApplicationBuilder.CreateApplicationBuilder(args);
 
-        builder.Services
-            .AddLogging();
+#if NET8_0
+        var builder = PhotinoBlazorApplicationBuilder.CreateApplicationBuilder(args);
+#else
+        var builder = PhotinoBlazorApplicationBuilder.CreateDefaultBuilder(args);
+#endif
+
+#if NET8_0
+        builder.Services.AddLogging();
+#else
+        builder.ConfigureServices((_, services) => services.AddLogging());
+#endif
 
         // register root component and selector
         builder.RootComponents.Add<App>("app");

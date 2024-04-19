@@ -1,257 +1,383 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿#if NET6_0 || NET7_0
+
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.Metrics;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using PhotinoNET;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace Photino.Blazor;
 
 #pragma warning disable CS0436
 
-public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBuilder
+/// <summary>
+/// A program initialization utility.
+/// </summary>
+public partial class PhotinoBlazorApplicationBuilder : IHostBuilder
 {
-    private readonly IHostEnvironment _environment;
-    private readonly HostBuilderContext _hostBuilderContext;
-    private readonly LoggingBuilder _logging;
-    private readonly MetricsBuilder _metrics;
-    private readonly ServiceCollection _serviceCollection = new();
+    private const string HostBuildingDiagnosticListenerName = "Microsoft.Extensions.Hosting";
+    private const string HostBuildingEventName = "HostBuilding";
+    private const string HostBuiltEventName = "HostBuilt";
 
+    private readonly List<Action<HostBuilderContext, IConfigurationBuilder>> _configureAppConfigActions = [];
+    private readonly List<IConfigureContainerAdapter> _configureContainerActions = [];
+    private readonly List<Action<IConfigurationBuilder>> _configureHostConfigActions = [];
+    private readonly List<Action<HostBuilderContext, IServiceCollection>> _configureServicesActions = [];
+
+    private IConfiguration? _appConfiguration;
     private IServiceProvider? _appServices;
-    private Action<object> _configureContainer = _ => { };
-    private Func<IServiceProvider> _createServiceProvider;
-    private HostBuilderAdapter? _hostBuilderAdapter;
+    private PhysicalFileProvider? _defaultProvider;
+    private HostBuilderContext? _hostBuilderContext;
     private bool _hostBuilt;
+    private IConfiguration? _hostConfiguration;
+    private HostingEnvironment? _hostingEnvironment;
+    private IServiceFactoryAdapter _serviceProviderFactory;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="HostApplicationBuilder"/> class with preconfigured defaults.
+    /// Initializes a new instance of <see cref="HostBuilder"/>.
     /// </summary>
-    /// <remarks>
-    ///   The following defaults are applied to the returned <see cref="HostApplicationBuilder"/>:
-    ///   <list type="bullet">
-    ///     <item><description>set the <see cref="IHostEnvironment.ContentRootPath"/> to the result of <see cref="Directory.GetCurrentDirectory()"/></description></item>
-    ///     <item><description>load host <see cref="IConfiguration"/> from "DOTNET_" prefixed environment variables</description></item>
-    ///     <item><description>load host <see cref="IConfiguration"/> from supplied command line args</description></item>
-    ///     <item><description>load app <see cref="IConfiguration"/> from 'appsettings.json' and 'appsettings.[<see cref="IHostEnvironment.EnvironmentName"/>].json'</description></item>
-    ///     <item><description>load app <see cref="IConfiguration"/> from User Secrets when <see cref="IHostEnvironment.EnvironmentName"/> is 'Development' using the entry assembly</description></item>
-    ///     <item><description>load app <see cref="IConfiguration"/> from environment variables</description></item>
-    ///     <item><description>load app <see cref="IConfiguration"/> from supplied command line args</description></item>
-    ///     <item><description>configure the <see cref="ILoggerFactory"/> to log to the console, debug, and event source output</description></item>
-    ///     <item><description>enables scope validation on the dependency injection container when <see cref="IHostEnvironment.EnvironmentName"/> is 'Development'</description></item>
-    ///   </list>
-    /// </remarks>
     public PhotinoBlazorApplicationBuilder()
-        : this(args: null)
     {
+        _serviceProviderFactory = new ServiceFactoryAdapter<IServiceCollection>(new DefaultServiceProviderFactory());
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="HostApplicationBuilder"/> class with preconfigured defaults.
+    /// A central location for sharing state between components during the host building process.
     /// </summary>
-    /// <remarks>
-    ///   The following defaults are applied to the returned <see cref="HostApplicationBuilder"/>:
-    ///   <list type="bullet">
-    ///     <item><description>set the <see cref="IHostEnvironment.ContentRootPath"/> to the result of <see cref="Directory.GetCurrentDirectory()"/></description></item>
-    ///     <item><description>load host <see cref="IConfiguration"/> from "DOTNET_" prefixed environment variables</description></item>
-    ///     <item><description>load host <see cref="IConfiguration"/> from supplied command line args</description></item>
-    ///     <item><description>load app <see cref="IConfiguration"/> from 'appsettings.json' and 'appsettings.[<see cref="IHostEnvironment.EnvironmentName"/>].json'</description></item>
-    ///     <item><description>load app <see cref="IConfiguration"/> from User Secrets when <see cref="IHostEnvironment.EnvironmentName"/> is 'Development' using the entry assembly</description></item>
-    ///     <item><description>load app <see cref="IConfiguration"/> from environment variables</description></item>
-    ///     <item><description>load app <see cref="IConfiguration"/> from supplied command line args</description></item>
-    ///     <item><description>configure the <see cref="ILoggerFactory"/> to log to the console, debug, and event source output</description></item>
-    ///     <item><description>enables scope validation on the dependency injection container when <see cref="IHostEnvironment.EnvironmentName"/> is 'Development'</description></item>
-    ///   </list>
-    /// </remarks>
-    /// <param name="args">The command line args.</param>
-    public PhotinoBlazorApplicationBuilder(string[]? args)
-        : this(new HostApplicationBuilderSettings { Args = args })
-    {
-    }
+    public IDictionary<object, object> Properties { get; } = new Dictionary<object, object>();
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="HostApplicationBuilder"/>.
-    /// </summary>
-    /// <param name="settings">Settings controlling initial configuration and whether default settings should be used.</param>
-    public PhotinoBlazorApplicationBuilder(HostApplicationBuilderSettings? settings)
-    {
-        settings ??= new HostApplicationBuilderSettings();
-        Configuration = settings.Configuration ?? new ConfigurationManager();
-
-        if (!settings.DisableDefaults)
-        {
-            if (settings.ContentRootPath is null && Configuration[HostDefaults.ContentRootKey] is null)
-            {
-                HostingHostBuilderExtensions.SetDefaultContentRoot(Configuration);
-            }
-
-            Configuration.AddEnvironmentVariables(prefix: "DOTNET_");
-        }
-
-        Initialize(settings, out _hostBuilderContext, out _environment, out _logging, out _metrics);
-
-        ServiceProviderOptions? serviceProviderOptions = null;
-        if (!settings.DisableDefaults)
-        {
-            HostingHostBuilderExtensions.ApplyDefaultAppConfiguration(_hostBuilderContext, Configuration, settings.Args);
-            HostingHostBuilderExtensions.AddDefaultServices(_hostBuilderContext, Services);
-            serviceProviderOptions = HostingHostBuilderExtensions.CreateDefaultServiceProviderOptions(_hostBuilderContext);
-        }
-
-        _createServiceProvider = () =>
-        {
-            // Call _configureContainer in case anyone adds callbacks via HostBuilderAdapter.ConfigureContainer<IServiceCollection>() during build.
-            // Otherwise, this no-ops.
-            _configureContainer(Services);
-            return serviceProviderOptions is null ? Services.BuildServiceProvider() : Services.BuildServiceProvider(serviceProviderOptions);
-        };
-    }
-
-    internal PhotinoBlazorApplicationBuilder(HostApplicationBuilderSettings? settings, bool empty)
-    {
-        Debug.Assert(empty, "should only be called with empty: true");
-
-        settings ??= new HostApplicationBuilderSettings();
-        Configuration = settings.Configuration ?? new ConfigurationManager();
-
-        Initialize(settings, out _hostBuilderContext, out _environment, out _logging, out _metrics);
-
-        _createServiceProvider = () =>
-        {
-            // Call _configureContainer in case anyone adds callbacks via HostBuilderAdapter.ConfigureContainer<IServiceCollection>() during build.
-            // Otherwise, this no-ops.
-            _configureContainer(Services);
-            return Services.BuildServiceProvider();
-        };
-    }
-
-    /// <summary>
-    /// Gets the set of key/value configuration properties.
-    /// </summary>
-    /// <remarks>
-    /// This can be mutated by adding more configuration sources, which will update its current view.
-    /// </remarks>
-    public ConfigurationManager Configuration { get; }
-
-    IConfigurationManager IHostApplicationBuilder.Configuration => Configuration;
-    /// <inheritdoc />
-    public IHostEnvironment Environment => _environment;
-
-    /// <inheritdoc />
-    public ILoggingBuilder Logging => _logging;
-
-    /// <inheritdoc />
-    public IMetricsBuilder Metrics => _metrics;
-
-    IDictionary<object, object> IHostApplicationBuilder.Properties => _hostBuilderContext.Properties;
     public RootComponentList RootComponents { get; set; } = [];
 
-    /// <inheritdoc />
-    public IServiceCollection Services => _serviceCollection;
-
     /// <summary>
-    /// Build the host. This can only be called once.
+    /// Run the given actions to initialize the host. This can only be called once.
     /// </summary>
-    /// <returns>An initialized <see cref="IHost"/>.</returns>
-    public PhotinoBlazorApplication Build()
+    /// <returns>An initialized <see cref="IHost"/></returns>
+    /// <remarks>Adds basic services to the host such as application lifetime, host environment, and logging.</remarks>
+    public IPhotinoBlazorApplication Build()
     {
         if (_hostBuilt)
         {
             throw new InvalidOperationException("BuildCalled");
         }
-
         _hostBuilt = true;
 
-        using DiagnosticListener diagnosticListener = HostBuilder.LogHostBuilding(this);
+        // REVIEW: If we want to raise more events outside of these calls then we will need to
+        // stash this in a field.
+        using DiagnosticListener diagnosticListener = LogHostBuilding(this);
 
-        _hostBuilderAdapter?.ApplyChanges();
-
-        _appServices = _createServiceProvider();
-
-        // Prevent further modification of the service collection now that the provider is built.
-        _serviceCollection.MakeReadOnly();
+        InitializeHostConfiguration();
+        InitializeHostingEnvironment();
+        InitializeHostBuilderContext();
+        InitializeAppConfiguration();
+        InitializeServiceProvider();
 
         var app = _appServices.GetRequiredService<PhotinoBlazorApplication>();
         app.Initialize(_appServices, RootComponents);
 
         // NOTE: I dont fully understand the usage of this method, so for now I'll leave this here
-        var host = HostBuilder.ResolveHost(_appServices, diagnosticListener);
+        var host = ResolveHost(_appServices, diagnosticListener);
         return app;
     }
 
-    public void ConfigureContainer<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory, Action<TContainerBuilder>? configure = null) where TContainerBuilder : notnull
+    /// <summary>
+    /// Sets up the configuration for the remainder of the build process and application. This can be called multiple times and
+    /// the results will be additive. The results will be available at <see cref="HostBuilderContext.Configuration"/> for
+    /// subsequent operations, as well as in <see cref="IHost.Services"/>.
+    /// </summary>
+    /// <param name="configureDelegate">The delegate for configuring the <see cref="IConfigurationBuilder"/> that will be used
+    /// to construct the <see cref="IConfiguration"/> for the host.</param>
+    /// <returns>The same instance of the <see cref="IHostBuilder"/> for chaining.</returns>
+    public IHostBuilder ConfigureAppConfiguration(Action<HostBuilderContext, IConfigurationBuilder> configureDelegate)
     {
-        _createServiceProvider = () =>
-        {
-            TContainerBuilder containerBuilder = factory.CreateBuilder(Services);
-            // Call _configureContainer in case anyone  more callbacks via HostBuilderAdapter.ConfigureContainer<TContainerBuilder>() during build.
-            // Otherwise, this is equivalent to configure?.Invoke(containerBuilder).
-            _configureContainer(containerBuilder);
-            return factory.CreateServiceProvider(containerBuilder);
-        };
+        ThrowHelper.ThrowIfNull(configureDelegate);
 
-        // Store _configureContainer separately so it can replaced individually by the HostBuilderAdapter.
-        _configureContainer = containerBuilder => configure?.Invoke((TContainerBuilder)containerBuilder);
+        _configureAppConfigActions.Add(configureDelegate);
+        return this;
     }
 
-    private void Initialize(HostApplicationBuilderSettings settings, out HostBuilderContext hostBuilderContext, out IHostEnvironment environment, out LoggingBuilder logging, out MetricsBuilder metrics)
+    /// <summary>
+    /// Enables configuring the instantiated dependency container. This can be called multiple times and
+    /// the results will be additive.
+    /// </summary>
+    /// <typeparam name="TContainerBuilder">The type of the builder to create.</typeparam>
+    /// <param name="configureDelegate">The delegate for configuring the <see cref="IConfigurationBuilder"/> that will be used
+    /// to construct the <see cref="IConfiguration"/> for the host.</param>
+    /// <returns>The same instance of the <see cref="IHostBuilder"/> for chaining.</returns>
+    public IHostBuilder ConfigureContainer<TContainerBuilder>(Action<HostBuilderContext, TContainerBuilder> configureDelegate)
     {
-        // Command line args are added even when settings.DisableDefaults == true. If the caller didn't want settings.Args applied,
-        // they wouldn't have set them on the settings.
-        HostingHostBuilderExtensions.AddCommandLineConfig(Configuration, settings.Args);
+        ThrowHelper.ThrowIfNull(configureDelegate);
 
-        // HostApplicationBuilderSettings override all other config sources.
-        List<KeyValuePair<string, string?>>? optionList = null;
-        if (settings.ApplicationName is not null)
-        {
-            optionList ??= [];
-            optionList.Add(new KeyValuePair<string, string?>(HostDefaults.ApplicationKey, settings.ApplicationName));
-        }
-        if (settings.EnvironmentName is not null)
-        {
-            optionList ??= [];
-            optionList.Add(new KeyValuePair<string, string?>(HostDefaults.EnvironmentKey, settings.EnvironmentName));
-        }
-        if (settings.ContentRootPath is not null)
-        {
-            optionList ??= [];
-            optionList.Add(new KeyValuePair<string, string?>(HostDefaults.ContentRootKey, settings.ContentRootPath));
-        }
-        if (optionList is not null)
-        {
-            Configuration.AddInMemoryCollection(optionList);
-        }
+        _configureContainerActions.Add(new ConfigureContainerAdapter<TContainerBuilder>(configureDelegate));
+        return this;
+    }
 
+    /// <summary>
+    /// Set up the configuration for the builder itself. This will be used to initialize the <see cref="IHostEnvironment"/>
+    /// for use later in the build process. This can be called multiple times and the results will be additive.
+    /// </summary>
+    /// <param name="configureDelegate">The delegate for configuring the <see cref="IConfigurationBuilder"/> that will be used
+    /// to construct the <see cref="IConfiguration"/> for the host.</param>
+    /// <returns>The same instance of the <see cref="IHostBuilder"/> for chaining.</returns>
+    public IHostBuilder ConfigureHostConfiguration(Action<IConfigurationBuilder> configureDelegate)
+    {
+        ThrowHelper.ThrowIfNull(configureDelegate);
 
-        (HostingEnvironment hostingEnvironment, PhysicalFileProvider physicalFileProvider) = HostBuilder.CreateHostingEnvironment(Configuration);
+        _configureHostConfigActions.Add(configureDelegate);
+        return this;
+    }
+    /// <summary>
+    /// Adds services to the container. This can be called multiple times and the results will be additive.
+    /// </summary>
+    /// <param name="configureDelegate">The delegate for configuring the <see cref="IConfigurationBuilder"/> that will be used
+    /// to construct the <see cref="IConfiguration"/> for the host.</param>
+    /// <returns>The same instance of the <see cref="IHostBuilder"/> for chaining.</returns>
+    public IHostBuilder ConfigureServices(Action<HostBuilderContext, IServiceCollection> configureDelegate)
+    {
+        ThrowHelper.ThrowIfNull(configureDelegate);
 
-        Configuration.SetFileProvider(physicalFileProvider);
+        _configureServicesActions.Add(configureDelegate);
+        return this;
+    }
 
-        hostBuilderContext = new HostBuilderContext(new Dictionary<object, object>())
+    /// <summary>
+    /// Overrides the factory used to create the service provider.
+    /// </summary>
+    /// <typeparam name="TContainerBuilder">The type of the builder to create.</typeparam>
+    /// <param name="factory">A factory used for creating service providers.</param>
+    /// <returns>The same instance of the <see cref="IHostBuilder"/> for chaining.</returns>
+    public IHostBuilder UseServiceProviderFactory<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory) where TContainerBuilder : notnull
+    {
+        ThrowHelper.ThrowIfNull(factory);
+
+        _serviceProviderFactory = new ServiceFactoryAdapter<TContainerBuilder>(factory);
+        return this;
+    }
+
+    /// <summary>
+    /// Overrides the factory used to create the service provider.
+    /// </summary>
+    /// <param name="factory">A factory used for creating service providers.</param>
+    /// <typeparam name="TContainerBuilder">The type of the builder to create.</typeparam>
+    /// <returns>The same instance of the <see cref="IHostBuilder"/> for chaining.</returns>
+    public IHostBuilder UseServiceProviderFactory<TContainerBuilder>(Func<HostBuilderContext, IServiceProviderFactory<TContainerBuilder>> factory) where TContainerBuilder : notnull
+    {
+        ThrowHelper.ThrowIfNull(factory);
+
+        _serviceProviderFactory = new ServiceFactoryAdapter<TContainerBuilder>(() => _hostBuilderContext!, factory);
+        return this;
+    }
+    internal static (HostingEnvironment, PhysicalFileProvider) CreateHostingEnvironment(IConfiguration hostConfiguration)
+    {
+        var hostingEnvironment = new HostingEnvironment()
         {
-            HostingEnvironment = hostingEnvironment,
-            Configuration = Configuration,
+            EnvironmentName = hostConfiguration[HostDefaults.EnvironmentKey] ?? Environments.Production,
+            ContentRootPath = ResolveContentRootPath(hostConfiguration[HostDefaults.ContentRootKey], AppContext.BaseDirectory),
         };
 
-        environment = hostingEnvironment;
+        string? applicationName = hostConfiguration[HostDefaults.ApplicationKey];
+        if (string.IsNullOrEmpty(applicationName))
+        {
+            // Note GetEntryAssembly returns null for the net4x console test runner.
+            applicationName = Assembly.GetEntryAssembly()?.GetName().Name;
+        }
 
-        Services.AddOptions<PhotinoBlazorApplicationConfiguration>().Configure(opts =>
+        if (applicationName is not null)
+        {
+            hostingEnvironment.ApplicationName = applicationName;
+        }
+
+        var physicalFileProvider = new PhysicalFileProvider(hostingEnvironment.ContentRootPath);
+        hostingEnvironment.ContentRootFileProvider = physicalFileProvider;
+
+        return (hostingEnvironment, physicalFileProvider);
+    }
+
+    [MemberNotNull(nameof(_appServices))]
+    internal static void PopulateServiceCollection(
+        IServiceCollection services,
+        HostBuilderContext hostBuilderContext,
+        HostingEnvironment hostingEnvironment,
+        PhysicalFileProvider defaultFileProvider,
+        IConfiguration appConfiguration,
+        Func<IServiceProvider> serviceProviderGetter)
+    {
+#pragma warning disable CS0618 // Type or member is obsolete
+        services.AddSingleton<IHostingEnvironment>(hostingEnvironment);
+#pragma warning restore CS0618 // Type or member is obsolete
+        services.AddSingleton<IHostEnvironment>(hostingEnvironment);
+        services.AddSingleton(hostBuilderContext);
+        // register configuration as factory to make it dispose with the service provider
+        services.AddSingleton(_ => appConfiguration);
+#pragma warning disable CS0618 // Type or member is obsolete
+        services.AddSingleton(s => (IApplicationLifetime)s.GetRequiredService<IHostApplicationLifetime>());
+#pragma warning restore CS0618 // Type or member is obsolete
+        services.AddSingleton<IHostApplicationLifetime, ApplicationLifetime>();
+
+        AddLifetime(services);
+
+        services.AddSingleton<IHost>(_ =>
+        {
+            // We use serviceProviderGetter() instead of the _ parameter because these can be different given a custom IServiceProviderFactory.
+            // We want the host to always dispose the IServiceProvider returned by the IServiceProviderFactory.
+            // https://github.com/dotnet/runtime/issues/36060
+            IServiceProvider appServices = serviceProviderGetter();
+            return new Microsoft.Extensions.Hosting.Internal.Host(appServices,
+                hostingEnvironment,
+                defaultFileProvider,
+                appServices.GetRequiredService<IHostApplicationLifetime>(),
+                appServices.GetRequiredService<ILogger<Microsoft.Extensions.Hosting.Internal.Host>>(),
+                appServices.GetRequiredService<IHostLifetime>(),
+                appServices.GetRequiredService<IOptions<HostOptions>>());
+        });
+        services.AddOptions().Configure<HostOptions>(options => { options.Initialize(hostBuilderContext.Configuration); });
+        services.AddLogging();
+        services.AddMetrics();
+    }
+
+    internal static string ResolveContentRootPath(string? contentRootPath, string basePath)
+    {
+        if (string.IsNullOrEmpty(contentRootPath))
+        {
+            return basePath;
+        }
+        if (Path.IsPathRooted(contentRootPath))
+        {
+            return contentRootPath;
+        }
+        return Path.Combine(Path.GetFullPath(basePath), contentRootPath);
+    }
+
+    internal static IHost ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+    {
+        if (serviceProvider is null)
+        {
+            throw new InvalidOperationException("NullIServiceProvider");
+        }
+
+        // resolve configuration explicitly once to mark it as resolved within the
+        // service provider, ensuring it will be properly disposed with the provider
+        _ = serviceProvider.GetService<IConfiguration>();
+
+        var host = serviceProvider.GetRequiredService<IHost>();
+
+        if (diagnosticListener.IsEnabled() && diagnosticListener.IsEnabled(HostBuiltEventName))
+        {
+            Write(diagnosticListener, HostBuiltEventName, host);
+        }
+
+        return host;
+    }
+
+    private static void AddLifetime(IServiceCollection services)
+    {
+        if (!OperatingSystem.IsAndroid() && !OperatingSystem.IsBrowser() && !OperatingSystem.IsIOS() && !OperatingSystem.IsTvOS())
+        {
+            services.AddSingleton<IHostLifetime, ConsoleLifetime>();
+        }
+        else
+        {
+            services.AddSingleton<IHostLifetime, NullLifetime>();
+        }
+    }
+
+    private static DiagnosticListener LogHostBuilding(IHostBuilder hostBuilder)
+    {
+        var diagnosticListener = new DiagnosticListener(HostBuildingDiagnosticListenerName);
+
+        if (diagnosticListener.IsEnabled() && diagnosticListener.IsEnabled(HostBuildingEventName))
+        {
+            Write(diagnosticListener, HostBuildingEventName, hostBuilder);
+        }
+
+        return diagnosticListener;
+    }
+
+
+    // Remove when https://github.com/dotnet/runtime/pull/78532 is merged and consumed by the used SDK.
+#if NET7_0
+    [UnconditionalSuppressMessage("AOT", "IL3050:RequiresDynamicCode", Justification = "DiagnosticSource is used here to pass objects in-memory to code using HostFactoryResolver. This won't require creating new generic types.")]
+#endif
+    [UnconditionalSuppressMessage("ReflectionAnalysis", "IL2026:UnrecognizedReflectionPattern", Justification = "The values being passed into Write are being consumed by the application already.")]
+    private static void Write<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
+        DiagnosticListener diagnosticSource,
+        string name,
+        T value)
+    {
+        diagnosticSource.Write(name, value);
+    }
+
+    [MemberNotNull(nameof(_appConfiguration))]
+    private void InitializeAppConfiguration()
+    {
+        IConfigurationBuilder configBuilder = new ConfigurationBuilder()
+            .SetBasePath(_hostingEnvironment!.ContentRootPath)
+            .AddConfiguration(_hostConfiguration!, shouldDisposeConfiguration: true);
+
+        foreach (Action<HostBuilderContext, IConfigurationBuilder> buildAction in _configureAppConfigActions)
+        {
+            buildAction(_hostBuilderContext!, configBuilder);
+        }
+        _appConfiguration = configBuilder.Build();
+        _hostBuilderContext!.Configuration = _appConfiguration;
+    }
+
+    [MemberNotNull(nameof(_hostBuilderContext))]
+    private void InitializeHostBuilderContext()
+    {
+        _hostBuilderContext = new HostBuilderContext(Properties)
+        {
+            HostingEnvironment = _hostingEnvironment!,
+            Configuration = _hostConfiguration!
+        };
+    }
+    [MemberNotNull(nameof(_hostConfiguration))]
+    private void InitializeHostConfiguration()
+    {
+        IConfigurationBuilder configBuilder = new ConfigurationBuilder()
+            .AddInMemoryCollection(); // Make sure there's some default storage since there are no default providers
+
+        foreach (Action<IConfigurationBuilder> buildAction in _configureHostConfigActions)
+        {
+            buildAction(configBuilder);
+        }
+        _hostConfiguration = configBuilder.Build();
+    }
+
+    [MemberNotNull(nameof(_defaultProvider))]
+    [MemberNotNull(nameof(_hostingEnvironment))]
+    private void InitializeHostingEnvironment()
+    {
+        (_hostingEnvironment, _defaultProvider) = CreateHostingEnvironment(_hostConfiguration!); // TODO-NULLABLE: https://github.com/dotnet/csharplang/discussions/5778. The same pattern exists below as well.
+    }
+    [MemberNotNull(nameof(_appServices))]
+    private void InitializeServiceProvider()
+    {
+        var services = new ServiceCollection();
+
+        services.AddOptions<PhotinoBlazorApplicationConfiguration>().Configure(opts =>
         {
             opts.AppBaseUri = new Uri(PhotinoWebViewManager.AppBaseUri);
             opts.HostPage = "index.html";
         });
 
-        Services.AddScoped(sp =>
+        services.AddScoped(sp =>
         {
             var handler = sp.GetRequiredService<PhotinoHttpHandler>();
             return new HttpClient(handler) { BaseAddress = new Uri(PhotinoWebViewManager.AppBaseUri) };
         });
 
-        Services.AddSingleton(sp =>
+        services.AddSingleton(sp =>
         {
             var manager = sp.GetRequiredService<PhotinoWebViewManager>();
             var store = sp.GetRequiredService<JSComponentConfigurationStore>();
@@ -259,184 +385,52 @@ public sealed partial class PhotinoBlazorApplicationBuilder : IHostApplicationBu
             return new BlazorWindowRootComponents(manager, store);
         });
 
-        Services.AddSingleton<IFileProvider>(sp =>
+        services.AddSingleton<IFileProvider>(sp =>
         {
             var root = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot");
             return new PhysicalFileProvider(root);
         });
 
-        Services.AddSingleton<Dispatcher, PhotinoDispatcher>();
-        Services.AddSingleton<JSComponentConfigurationStore>();
-        Services.AddSingleton<PhotinoBlazorApplication>();
-        Services.AddSingleton<PhotinoHttpHandler>();
-        Services.AddSingleton<PhotinoSynchronizationContext>();
-        Services.AddSingleton<PhotinoWebViewManager>();
-        Services.AddSingleton(new PhotinoWindow());
-        Services.AddBlazorWebView();
+        services.AddSingleton<Dispatcher, PhotinoDispatcher>();
+        services.AddSingleton<JSComponentConfigurationStore>();
+        services.AddSingleton<PhotinoBlazorApplication>();
+        services.AddSingleton<PhotinoHttpHandler>();
+        services.AddSingleton<PhotinoSynchronizationContext>();
+        services.AddSingleton<PhotinoWebViewManager>();
+        services.AddSingleton(new PhotinoWindow());
+        services.AddBlazorWebView();
 
-        HostBuilder.PopulateServiceCollection(
-            Services,
-            hostBuilderContext,
-            hostingEnvironment,
-            physicalFileProvider,
-            Configuration,
+        PopulateServiceCollection(
+            services,
+            _hostBuilderContext!,
+            _hostingEnvironment!,
+            _defaultProvider!,
+            _appConfiguration!,
             () => _appServices!);
 
-        logging = new LoggingBuilder(Services);
-        metrics = new MetricsBuilder(Services);
-    }
-
-    // Lazily allocate HostBuilderAdapter so the allocations can be avoided if there's nothing observing the events.
-    internal IHostBuilder AsHostBuilder() => _hostBuilderAdapter ??= new HostBuilderAdapter(this);
-
-    private sealed class HostBuilderAdapter(PhotinoBlazorApplicationBuilder hostApplicationBuilder) : IHostBuilder
-    {
-        private readonly List<Action<HostBuilderContext, IConfigurationBuilder>> _configureAppConfigActions = [];
-        private readonly List<IConfigureContainerAdapter> _configureContainerActions = [];
-        private readonly List<Action<IConfigurationBuilder>> _configureHostConfigActions = [];
-        private readonly List<Action<HostBuilderContext, IServiceCollection>> _configureServicesActions = [];
-        private readonly PhotinoBlazorApplicationBuilder _hostApplicationBuilder = hostApplicationBuilder;
-        private IServiceFactoryAdapter? _serviceProviderFactory;
-
-        public IDictionary<object, object> Properties => _hostApplicationBuilder._hostBuilderContext.Properties;
-
-        public void ApplyChanges()
+        foreach (Action<HostBuilderContext, IServiceCollection> configureServicesAction in _configureServicesActions)
         {
-            ConfigurationManager config = _hostApplicationBuilder.Configuration;
-
-            if (_configureHostConfigActions.Count > 0)
-            {
-                string? previousApplicationName = config[HostDefaults.ApplicationKey];
-                string? previousEnvironment = config[HostDefaults.EnvironmentKey];
-                string? previousContentRootConfig = config[HostDefaults.ContentRootKey];
-                string previousContentRootPath = _hostApplicationBuilder._hostBuilderContext.HostingEnvironment.ContentRootPath;
-
-                foreach (Action<IConfigurationBuilder> configureHostAction in _configureHostConfigActions)
-                {
-                    configureHostAction(config);
-                }
-
-                // Disallow changing any host settings this late in the cycle. The reasoning is that we've already loaded the default configuration
-                // and done other things based on environment name, application name or content root.
-                if (!string.Equals(previousApplicationName, config[HostDefaults.ApplicationKey], StringComparison.OrdinalIgnoreCase))
-                {
-                    throw new NotSupportedException(string.Format("ApplicationNameChangeNotSupported - {0} {1}", previousApplicationName, config[HostDefaults.ApplicationKey]));
-                }
-                if (!string.Equals(previousEnvironment, config[HostDefaults.EnvironmentKey], StringComparison.OrdinalIgnoreCase))
-                {
-                    throw new NotSupportedException(string.Format("EnvironmentNameChangeNotSupoprted - {0} {1}", previousEnvironment, config[HostDefaults.EnvironmentKey]));
-                }
-                // It's okay if the ConfigureHostConfiguration callbacks either left the config unchanged or set it back to the real ContentRootPath.
-                // Setting it to anything else indicates code intends to change the content root via HostFactoryResolver which is unsupported.
-                string? currentContentRootConfig = config[HostDefaults.ContentRootKey];
-                if (!string.Equals(previousContentRootConfig, currentContentRootConfig, StringComparison.OrdinalIgnoreCase) &&
-                    !string.Equals(previousContentRootPath, HostBuilder.ResolveContentRootPath(currentContentRootConfig, AppContext.BaseDirectory), StringComparison.OrdinalIgnoreCase))
-                {
-                    throw new NotSupportedException(string.Format("ContentRootChangeNotSupported - {0} {1}", previousContentRootConfig, currentContentRootConfig));
-                }
-            }
-
-            foreach (Action<HostBuilderContext, IConfigurationBuilder> configureAppAction in _configureAppConfigActions)
-            {
-                configureAppAction(_hostApplicationBuilder._hostBuilderContext, config);
-            }
-            foreach (Action<HostBuilderContext, IServiceCollection> configureServicesAction in _configureServicesActions)
-            {
-                configureServicesAction(_hostApplicationBuilder._hostBuilderContext, _hostApplicationBuilder.Services);
-            }
-
-            if (_configureContainerActions.Count > 0)
-            {
-                Action<object> previousConfigureContainer = _hostApplicationBuilder._configureContainer;
-
-                _hostApplicationBuilder._configureContainer = containerBuilder =>
-                {
-                    previousConfigureContainer(containerBuilder);
-
-                    foreach (IConfigureContainerAdapter containerAction in _configureContainerActions)
-                    {
-                        containerAction.ConfigureContainer(_hostApplicationBuilder._hostBuilderContext, containerBuilder);
-                    }
-                };
-            }
-            if (_serviceProviderFactory is not null)
-            {
-                _hostApplicationBuilder._createServiceProvider = () =>
-                {
-                    object containerBuilder = _serviceProviderFactory.CreateBuilder(_hostApplicationBuilder.Services);
-                    _hostApplicationBuilder._configureContainer(containerBuilder);
-                    return _serviceProviderFactory.CreateServiceProvider(containerBuilder);
-                };
-            }
-        }
-        public IHost Build() => throw new NotSupportedException();
-
-        public IHostBuilder ConfigureAppConfiguration(Action<HostBuilderContext, IConfigurationBuilder> configureDelegate)
-        {
-            ThrowHelper.ThrowIfNull(configureDelegate);
-
-            _configureAppConfigActions.Add(configureDelegate);
-            return this;
+            configureServicesAction(_hostBuilderContext!, services);
         }
 
-        public IHostBuilder ConfigureContainer<TContainerBuilder>(Action<HostBuilderContext, TContainerBuilder> configureDelegate)
-        {
-            ThrowHelper.ThrowIfNull(configureDelegate);
+        object containerBuilder = _serviceProviderFactory.CreateBuilder(services);
 
-            _configureContainerActions.Add(new ConfigureContainerAdapter<TContainerBuilder>(configureDelegate));
-            return this;
+        foreach (IConfigureContainerAdapter containerAction in _configureContainerActions)
+        {
+            containerAction.ConfigureContainer(_hostBuilderContext!, containerBuilder);
         }
 
-        public IHostBuilder ConfigureHostConfiguration(Action<IConfigurationBuilder> configureDelegate)
-        {
-            ThrowHelper.ThrowIfNull(configureDelegate);
-
-            _configureHostConfigActions.Add(configureDelegate);
-            return this;
-        }
-        public IHostBuilder ConfigureServices(Action<HostBuilderContext, IServiceCollection> configureDelegate)
-        {
-            ThrowHelper.ThrowIfNull(configureDelegate);
-
-            _configureServicesActions.Add(configureDelegate);
-            return this;
-        }
-
-        public IHostBuilder UseServiceProviderFactory<TContainerBuilder>(IServiceProviderFactory<TContainerBuilder> factory) where TContainerBuilder : notnull
-        {
-            ThrowHelper.ThrowIfNull(factory);
-
-            _serviceProviderFactory = new ServiceFactoryAdapter<TContainerBuilder>(factory);
-            return this;
-
-        }
-
-        public IHostBuilder UseServiceProviderFactory<TContainerBuilder>(Func<HostBuilderContext, IServiceProviderFactory<TContainerBuilder>> factory) where TContainerBuilder : notnull
-        {
-            ThrowHelper.ThrowIfNull(factory);
-
-            _serviceProviderFactory = new ServiceFactoryAdapter<TContainerBuilder>(() => _hostApplicationBuilder._hostBuilderContext, factory);
-            return this;
-        }
-    }
-
-    private sealed class LoggingBuilder(IServiceCollection services) : ILoggingBuilder
-    {
-        public IServiceCollection Services { get; } = services;
-    }
-
-    private sealed class MetricsBuilder(IServiceCollection services) : IMetricsBuilder
-    {
-        public IServiceCollection Services { get; } = services;
+        _appServices = _serviceProviderFactory.CreateServiceProvider(containerBuilder);
     }
 }
 
 public sealed partial class PhotinoBlazorApplicationBuilder
 {
-    /// Initializes a new instance of the <see cref="PhotinoBlazorApplicationBuilder"/> class with pre-configured defaults.
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HostBuilder"/> class with pre-configured defaults.
     /// </summary>
     /// <remarks>
-    ///   The following defaults are applied to the returned <see cref="PhotinoBlazorApplicationBuilder"/>:
+    ///   The following defaults are applied to the returned <see cref="HostBuilder"/>:
     ///   <list type="bullet">
     ///     <item><description>set the <see cref="IHostEnvironment.ContentRootPath"/> to the result of <see cref="Directory.GetCurrentDirectory()"/></description></item>
     ///     <item><description>load host <see cref="IConfiguration"/> from "DOTNET_" prefixed environment variables</description></item>
@@ -447,14 +441,15 @@ public sealed partial class PhotinoBlazorApplicationBuilder
     ///     <item><description>enables scope validation on the dependency injection container when <see cref="IHostEnvironment.EnvironmentName"/> is 'Development'</description></item>
     ///   </list>
     /// </remarks>
-    /// <returns>The initialized <see cref="PhotinoBlazorApplicationBuilder"/>.</returns>
-    public static PhotinoBlazorApplicationBuilder CreateApplicationBuilder() => new();
+    /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
+    public static PhotinoBlazorApplicationBuilder CreateDefaultBuilder() =>
+        CreateDefaultBuilder(args: null);
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PhotinoBlazorApplicationBuilder"/> class with pre-configured defaults.
+    /// Initializes a new instance of the <see cref="HostBuilder"/> class with pre-configured defaults.
     /// </summary>
     /// <remarks>
-    ///   The following defaults are applied to the returned <see cref="PhotinoBlazorApplicationBuilder"/>:
+    ///   The following defaults are applied to the returned <see cref="HostBuilder"/>:
     ///   <list type="bullet">
     ///     <item><description>set the <see cref="IHostEnvironment.ContentRootPath"/> to the result of <see cref="Directory.GetCurrentDirectory()"/></description></item>
     ///     <item><description>load host <see cref="IConfiguration"/> from "DOTNET_" prefixed environment variables</description></item>
@@ -468,12 +463,14 @@ public sealed partial class PhotinoBlazorApplicationBuilder
     ///   </list>
     /// </remarks>
     /// <param name="args">The command line args.</param>
-    /// <returns>The initialized <see cref="PhotinoBlazorApplicationBuilder"/>.</returns>
-    public static PhotinoBlazorApplicationBuilder CreateApplicationBuilder(string[]? args) => new(args);
-
-    /// <inheritdoc cref="CreateApplicationBuilder()" />
-    /// <param name="settings">Controls the initial configuration and other settings for constructing the <see cref="PhotinoBlazorApplicationBuilder"/>.</param>
-    public static PhotinoBlazorApplicationBuilder CreateApplicationBuilder(HostApplicationBuilderSettings? settings) => new(settings);
+    /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
+    public static PhotinoBlazorApplicationBuilder CreateDefaultBuilder(string[]? args)
+    {
+        PhotinoBlazorApplicationBuilder builder = new();
+        return (PhotinoBlazorApplicationBuilder)builder.ConfigureDefaults(args);
+    }
 }
 
 #pragma warning restore CS0436
+
+#endif

@@ -32,7 +32,7 @@ namespace System
         private static void Throw(string? paramName) => throw new ArgumentNullException(paramName);
 
         /// <summary>
-        /// Throws either an <see cref="ArgumentNullException"/> or an <see cref="ArgumentException"/>
+        /// Throws either an <see cref="System.ArgumentNullException"/> or an <see cref="System.ArgumentException"/>
         /// if the specified string is <see langword="null"/> or whitespace respectively.
         /// </summary>
         /// <param name="argument">String to be checked for <see langword="null"/> or whitespace.</param>
@@ -66,7 +66,7 @@ namespace System
                 {
 #pragma warning disable CA2208 
                     throw new ArgumentException(paramName, "Argument is whitespace");
-#pragma warning restore CA2208
+#pragma warning restore CA2208 
                 }
             }
 

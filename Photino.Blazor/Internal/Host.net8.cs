@@ -1,4 +1,4 @@
-﻿#if NET6_0 || NET7_0
+﻿#if NET8_0
 
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
@@ -17,7 +17,7 @@ namespace Microsoft.Extensions.Hosting.Internal;
 
 [DebuggerDisplay("{DebuggerToString(),nq}")]
 [DebuggerTypeProxy(typeof(HostDebugView))]
-internal sealed class Host : IHost, IAsyncDisposable
+internal sealed partial class Host : IHost, IAsyncDisposable
 {
     private readonly ILogger<Host> _logger;
     private readonly IHostLifetime _hostLifetime;
@@ -304,9 +304,9 @@ internal sealed class Host : IHost, IAsyncDisposable
         _logger.Stopped();
     }
 
-#pragma warning disable CA1068 // I parametri CancellationToken devono essere indicati per ultimi
+#pragma warning disable CA1068
     private static async Task ForeachService<T>(
-#pragma warning restore CA1068 // I parametri CancellationToken devono essere indicati per ultimi
+#pragma warning restore CA1068
         IEnumerable<T> services,
         CancellationToken token,
         bool concurrent,
@@ -361,7 +361,7 @@ internal sealed class Host : IHost, IAsyncDisposable
                 {
                     if (groupedTasks.IsFaulted)
                     {
-                        exceptions.AddRange(groupedTasks.Exception!.InnerExceptions);
+                        exceptions.AddRange(groupedTasks.Exception.InnerExceptions);
                     }
                     else
                     {
@@ -460,5 +460,6 @@ internal sealed class Host : IHost, IAsyncDisposable
 }
 
 #pragma warning restore CS0436
+
 
 #endif
