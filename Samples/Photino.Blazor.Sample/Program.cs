@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using System;
-using System.Reflection;
 
 namespace Photino.Blazor.Sample;
 
@@ -10,7 +8,6 @@ internal class Program
     [STAThread]
     private static void Main(string[] args)
     {
-
 #if NET8_0
         var builder = PhotinoBlazorAppBuilder.CreateApplicationBuilder(args);
 #else
