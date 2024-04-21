@@ -456,8 +456,8 @@ public sealed partial class PhotinoBlazorAppBuilder
     ///   </list>
     /// </remarks>
     /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
-    public static PhotinoBlazorAppBuilder CreateDefaultBuilder() =>
-        CreateDefaultBuilder(args: null);
+    public static PhotinoBlazorAppBuilder CreateDefault() =>
+        CreateDefault(args: null);
 
     /// <summary>
     /// Initializes a new instance of the <see cref="HostBuilder"/> class with pre-configured defaults.
@@ -478,7 +478,7 @@ public sealed partial class PhotinoBlazorAppBuilder
     /// </remarks>
     /// <param name="args">The command line args.</param>
     /// <returns>The initialized <see cref="IHostBuilder"/>.</returns>
-    public static PhotinoBlazorAppBuilder CreateDefaultBuilder(string[]? args)
+    public static PhotinoBlazorAppBuilder CreateDefault(string[]? args)
     {
         PhotinoBlazorAppBuilder builder = new();
         return (PhotinoBlazorAppBuilder)builder.ConfigureDefaults(args);

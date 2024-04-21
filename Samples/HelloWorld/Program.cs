@@ -9,7 +9,7 @@ internal class Program
     [STAThread]
     private static void Main(string[] args)
     {
-        var builder = PhotinoBlazorAppBuilder.CreateApplicationBuilder(args);
+        var builder = PhotinoBlazorAppBuilder.CreateDefault(args);
         builder.Services
             .AddLogging();
 

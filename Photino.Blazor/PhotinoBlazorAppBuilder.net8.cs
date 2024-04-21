@@ -246,7 +246,6 @@ public sealed partial class PhotinoBlazorAppBuilder : IHostApplicationBuilder
             Configuration.AddInMemoryCollection(optionList);
         }
 
-
         (HostingEnvironment hostingEnvironment, PhysicalFileProvider physicalFileProvider) = HostBuilder.CreateHostingEnvironment(Configuration);
 
         Configuration.SetFileProvider(physicalFileProvider);
@@ -422,7 +421,6 @@ public sealed partial class PhotinoBlazorAppBuilder : IHostApplicationBuilder
 
             _serviceProviderFactory = new ServiceFactoryAdapter<TContainerBuilder>(factory);
             return this;
-
         }
 
         public IHostBuilder UseServiceProviderFactory<TContainerBuilder>(Func<HostBuilderContext, IServiceProviderFactory<TContainerBuilder>> factory) where TContainerBuilder : notnull
@@ -462,7 +460,7 @@ public sealed partial class PhotinoBlazorAppBuilder
     ///   </list>
     /// </remarks>
     /// <returns>The initialized <see cref="PhotinoBlazorApplicationBuilder"/>.</returns>
-    public static PhotinoBlazorAppBuilder CreateApplicationBuilder() => new();
+    public static PhotinoBlazorAppBuilder CreateDefault() => new();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PhotinoBlazorAppBuilder"/> class with pre-configured defaults.
@@ -483,11 +481,11 @@ public sealed partial class PhotinoBlazorAppBuilder
     /// </remarks>
     /// <param name="args">The command line args.</param>
     /// <returns>The initialized <see cref="PhotinoBlazorAppBuilder"/>.</returns>
-    public static PhotinoBlazorAppBuilder CreateApplicationBuilder(string[]? args) => new(args);
+    public static PhotinoBlazorAppBuilder CreateDefault(string[]? args) => new(args);
 
     /// <inheritdoc cref="CreateApplicationBuilder()" />
     /// <param name="settings">Controls the initial configuration and other settings for constructing the <see cref="PhotinoBlazorAppBuilder"/>.</param>
-    public static PhotinoBlazorAppBuilder CreateApplicationBuilder(HostApplicationBuilderSettings? settings) => new(settings);
+    public static PhotinoBlazorAppBuilder CreateDefault(HostApplicationBuilderSettings? settings) => new(settings);
 }
 
 #pragma warning restore CS0436
