@@ -77,7 +77,7 @@ public interface IHostBuilder
     /// Run the given actions to initialize the host. This can only be called once.
     /// </summary>
     /// <returns>An initialized <see cref="IHost"/>.</returns>
-    IPhotinoBlazorApp Build();
+    PhotinoBlazorApp Build();
 }
 
 #pragma warning restore CS0436

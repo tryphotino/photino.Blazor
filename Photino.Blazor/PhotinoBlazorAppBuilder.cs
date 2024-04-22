@@ -70,7 +70,7 @@ public partial class PhotinoBlazorAppBuilder : IHostBuilder
     /// </summary>
     /// <returns>An initialized <see cref="IHost"/></returns>
     /// <remarks>Adds basic services to the host such as application lifetime, host environment, and logging.</remarks>
-    public IPhotinoBlazorApp Build()
+    public PhotinoBlazorApp Build()
     {
         if (_hostBuilt)
         {

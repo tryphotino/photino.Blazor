@@ -1,23 +1,32 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using PhotinoNET;
 
 namespace Photino.Blazor;
 
-public class PhotinoBlazorApp : IPhotinoBlazorApp
+public partial class PhotinoBlazorApp
 {
-    public PhotinoWindow MainWindow { get; private set; } = default!;
+    public IHostEnvironment Environment
+    {
+        get => Services.GetRequiredService<IHostEnvironment>();
+    }
 
-    /// <summary>
-    /// Gets configuration for the root components in the window.
-    /// </summary>
-    public BlazorWindowRootComponents RootComponents { get; private set; } = default!;
+    public PhotinoWindow MainWindow
+    {
+        get => Services.GetRequiredService<PhotinoWindow>();
+    }
 
-    /// <summary>
-    /// Gets configuration for the service provider.
-    /// </summary>
+    public BlazorWindowRootComponents RootComponents
+    {
+        get => Services.GetRequiredService<BlazorWindowRootComponents>();
+    }
+
     public IServiceProvider Services { get; private set; } = default!;
 
-    public PhotinoWebViewManager WindowManager { get; private set; } = default!;
+    public PhotinoWebViewManager WindowManager
+    {
+        get => Services.GetRequiredService<PhotinoWebViewManager>();
+    }
 
     public Stream HandleWebRequest(object? sender, string? scheme, string url, out string contentType)
         => WindowManager.HandleWebRequest(sender, scheme, url, out contentType!)!;
@@ -36,9 +45,6 @@ public class PhotinoBlazorApp : IPhotinoBlazorApp
     internal void Initialize(IServiceProvider services, RootComponentList rootComponents)
     {
         Services = services;
-        RootComponents = Services.GetRequiredService<BlazorWindowRootComponents>();
-        MainWindow = Services.GetRequiredService<PhotinoWindow>();
-        WindowManager = Services.GetRequiredService<PhotinoWebViewManager>();
 
         ConfigureDefaults();
 
@@ -58,16 +64,4 @@ public class PhotinoBlazorApp : IPhotinoBlazorApp
         .SetHeight(900)
         .SetLeft(450)
         .SetTop(100);
-}
-
-public interface IPhotinoBlazorApp
-{
-    PhotinoWindow MainWindow { get; }
-    BlazorWindowRootComponents RootComponents { get; }
-    IServiceProvider Services { get; }
-    PhotinoWebViewManager WindowManager { get; }
-
-    Stream HandleWebRequest(object? sender, string? scheme, string url, out string contentType);
-
-    void Run();
 }

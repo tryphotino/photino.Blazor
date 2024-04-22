@@ -172,7 +172,7 @@ public sealed partial class PhotinoBlazorAppBuilder : IHostApplicationBuilder
     /// Build the host. This can only be called once.
     /// </summary>
     /// <returns>An initialized <see cref="IHost"/>.</returns>
-    public IPhotinoBlazorApp Build()
+    public PhotinoBlazorApp Build()
     {
         if (_hostBuilt)
         {
@@ -197,7 +197,7 @@ public sealed partial class PhotinoBlazorAppBuilder : IHostApplicationBuilder
         app.Initialize(_appServices, RootComponents);
 
         // NOTE: I dont fully understand the usage of this method, so for now I'll leave this here
-        var host = HostBuilder.ResolveHost(_appServices, diagnosticListener);
+        HostBuilder.ResolveHost(_appServices, diagnosticListener);
         return app;
     }
 
