@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PhotinoNET;
+using Photino.NET;
 
 namespace Photino.Blazor;
 

@@ -57,7 +57,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Photino.NET" Version="2.6.0" />
+		<PackageReference Include="Photino.NET" Version="2.6.1-alpha.1" />
 	</ItemGroup>
 
 </Project>

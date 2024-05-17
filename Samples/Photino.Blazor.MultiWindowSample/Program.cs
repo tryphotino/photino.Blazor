@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor.MultiWindowSample.Components;
-using PhotinoNET;
+using Photino.NET;
 using System;
 using System.Collections.Generic;
 

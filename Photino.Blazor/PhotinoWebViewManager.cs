@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebView;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
-using PhotinoNET;
+using Photino.NET;
 using System.Runtime.InteropServices;
 using System.Threading.Channels;
 

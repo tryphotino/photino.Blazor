@@ -9,7 +9,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
-using PhotinoNET;
+using Photino.NET;
 using System.Diagnostics;
 
 namespace Photino.Blazor;
