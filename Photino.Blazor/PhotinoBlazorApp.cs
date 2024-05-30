@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using PhotinoNET;
+using Photino.NET;
 using System;
 using System.IO;
 
