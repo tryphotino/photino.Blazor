@@ -1,0 +1,2 @@
+﻿Setting Publish Trimmed to True (the default) will cause the app to fail at runtime and not load the main page. 
+In theory, the rd.xml file can be used to control trimming, but we have not been able to get it to work.
