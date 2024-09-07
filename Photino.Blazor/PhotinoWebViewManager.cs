@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebView;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
-using PhotinoNET;
+using Photino.NET;
 using System.Runtime.InteropServices;
 using System.Threading.Channels;
 
@@ -87,7 +87,7 @@ public class PhotinoWebViewManager : WebViewManager
             Thread.Sleep(200);
     }
 
-    async Task MessagePump()
+    private async Task MessagePump()
     {
         var reader = _channel.Reader;
         try

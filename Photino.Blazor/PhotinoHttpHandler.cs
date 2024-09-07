@@ -26,7 +26,7 @@ public class PhotinoHttpHandler : DelegatingHandler
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         var content = app.HandleWebRequest(null, null, request.RequestUri?.AbsoluteUri ?? string.Empty, out string contentType);
-        if(content != null)
+        if (content != null)
         {
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {

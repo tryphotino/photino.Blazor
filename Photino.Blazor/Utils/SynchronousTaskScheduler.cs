@@ -1,6 +1,6 @@
 ﻿namespace Photino.Blazor.Utils;
 
-class SynchronousTaskScheduler : TaskScheduler
+internal class SynchronousTaskScheduler : TaskScheduler
 {
     public override int MaximumConcurrencyLevel
     {
