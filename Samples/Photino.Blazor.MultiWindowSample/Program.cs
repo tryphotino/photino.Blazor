@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Photino.Blazor.MultiWindowSample.Components;
-using PhotinoNET;
+using Photino.NET;
 
 namespace Photino.Blazor.MultiWindowSample
 {
