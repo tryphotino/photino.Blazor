@@ -5,8 +5,8 @@ trigger:
     - manual
 
 variables:
-    major: 2
-    minor: 7
+    major: 3
+    minor: 1
     patch: $[counter(variables['minor'], 0)] #this will reset when we bump minor
     buildConfiguration: "Release"
 
@@ -23,12 +23,6 @@ jobs:
                 packageType: sdk
                 version: "8.0.x"
                 installationPath: $(Agent.ToolsDirectory)/dotnet
-
-          #Build .JS project - create desktop.blazor.js file used in Photino.Bloazor project
-          #- task: CmdLine@2
-          #  displayName: 'Build desktop.blazor.js'
-          #  inputs:
-          #    script: dotnet build Photino.Blazor.JS/Photino.Blazor.JS.csproj -c $(buildConfiguration)
 
           #Build and Create NuGet package
           - task: CmdLine@2

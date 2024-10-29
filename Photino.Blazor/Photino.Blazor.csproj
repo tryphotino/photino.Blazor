@@ -20,6 +20,7 @@
 		<TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
 		<Title>Photino.blazor</Title>
 		<PackageIcon>photino.png</PackageIcon>
+		<OutputType>Library</OutputType>
 	</PropertyGroup>
 
 	<Target Name="SetPackageVersion" DependsOnTargets="Build">
