@@ -44,4 +44,4 @@ jobs:
                 command: push
                 packagesToPush: "Photino.Blazor/bin/$(buildConfiguration)/*.nupkg"
                 nuGetFeedType: external
-                publishFeedCredentials: "PhotinoNuGet"
+                publishFeedCredentials: "PhotinoNuget2024"
