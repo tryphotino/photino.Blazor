@@ -35,7 +35,7 @@
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="8.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="8.0.12" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.1" />
 	</ItemGroup>
 
@@ -43,9 +43,9 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="9.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.1" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
-	  <PackageReference Include="Photino.NET" Version="3.2.3" />
+		<PackageReference Include="Photino.NET" Version="4.0.16" />
 	</ItemGroup>
 
 </Project>
