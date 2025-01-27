@@ -1,6 +1,4 @@
-﻿#if NET8_0
-
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using Microsoft.Extensions.Configuration;
@@ -391,5 +389,3 @@ public partial class HostBuilder : IHostBuilder
 }
 
 #pragma warning restore CS0436 // Il tipo è in conflitto con il tipo importato
-
-#endif

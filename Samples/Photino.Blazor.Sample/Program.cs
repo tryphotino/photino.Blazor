@@ -3,25 +3,16 @@ using System;
 
 namespace Photino.Blazor.Sample;
 
-internal class Program
+internal static class Program
 {
     [STAThread]
     private static void Main(string[] args)
     {
-#if NET8_0
         var builder = PhotinoBlazorAppBuilder.CreateDefault(args);
-#else
-        var builder = PhotinoBlazorApplicationBuilder.CreateDefault(args);
-#endif
-
-#if NET8_0
-        builder.Services.AddLogging();
-#else
-        builder.ConfigureServices((_, services) => services.AddLogging());
-#endif
-
-        // register root component and selector
         builder.RootComponents.Add<App>("app");
+
+        // register services inside container
+        builder.Services.AddLogging();
 
         var app = builder.Build();
 
