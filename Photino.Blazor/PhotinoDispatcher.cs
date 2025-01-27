@@ -1,64 +1,60 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
 
-namespace Photino.Blazor
+namespace Photino.Blazor;
+
+internal class PhotinoDispatcher : Dispatcher
 {
-    internal class PhotinoDispatcher : Dispatcher
+    private readonly PhotinoSynchronizationContext _context;
+
+    public PhotinoDispatcher(PhotinoSynchronizationContext context)
     {
-        private readonly PhotinoSynchronizationContext _context;
+        _context = context;
+        _context.UnhandledException += (sender, e) => OnUnhandledException(e);
+    }
 
-        public PhotinoDispatcher(PhotinoSynchronizationContext context)
+    public override bool CheckAccess() => SynchronizationContext.Current == _context;
+
+    public override Task InvokeAsync(Action workItem)
+    {
+        if (CheckAccess())
         {
-            _context = context;
-            _context.UnhandledException += (sender, e) => OnUnhandledException(e);
+            workItem();
+            return Task.CompletedTask;
         }
 
-        public override bool CheckAccess() => SynchronizationContext.Current == _context;
+        return _context.InvokeAsync(workItem);
+    }
 
-        public override Task InvokeAsync(Action workItem)
+    public override Task InvokeAsync(Func<Task> workItem)
+    {
+        if (CheckAccess())
         {
-            if (CheckAccess())
-            {
-                workItem();
-                return Task.CompletedTask;
-            }
-
-            return _context.InvokeAsync(workItem);
+            return workItem();
         }
 
-        public override Task InvokeAsync(Func<Task> workItem)
-        {
-            if (CheckAccess())
-            {
-                return workItem();
-            }
+        return _context.InvokeAsync(workItem);
+    }
 
-            return _context.InvokeAsync(workItem);
+    public override Task<TResult> InvokeAsync<TResult>(Func<TResult> workItem)
+    {
+        if (CheckAccess())
+        {
+            return Task.FromResult(workItem());
         }
 
-        public override Task<TResult> InvokeAsync<TResult>(Func<TResult> workItem)
-        {
-            if (CheckAccess())
-            {
-                return Task.FromResult(workItem());
-            }
+        return _context.InvokeAsync(workItem);
+    }
 
-            return _context.InvokeAsync<TResult>(workItem);
+    public override Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> workItem)
+    {
+        if (CheckAccess())
+        {
+            return workItem();
         }
 
-        public override Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> workItem)
-        {
-            if (CheckAccess())
-            {
-                return workItem();
-            }
-
-            return _context.InvokeAsync<TResult>(workItem);
-        }
+        return _context.InvokeAsync(workItem);
     }
 }
