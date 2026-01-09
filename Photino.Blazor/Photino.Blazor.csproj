@@ -11,7 +11,7 @@
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/tryphotino/photino.Blazor</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/tryphotino/photino.Blazor</RepositoryUrl>
-		<TargetFrameworks>net8.0;net9.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
 		<Title>Photino.blazor</Title>
 		<PackageIcon>photino.png</PackageIcon>
 		<OutputType>Library</OutputType>
@@ -44,7 +44,12 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.1" />
 	</ItemGroup>
 
-	<ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebView" Version="10.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
 		<PackageReference Include="Photino.NET" Version="4.0.16" />
 	</ItemGroup>
 
