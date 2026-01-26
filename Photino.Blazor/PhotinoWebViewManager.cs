@@ -68,6 +68,11 @@ namespace Photino.Blazor
 
             //Remove parameters before attempting to retrieve the file. For example: http://localhost/_content/Blazorise/button.js?v=1.0.7.0
             if (url.Contains('?')) url = url.Substring(0, url.IndexOf('?'));
+            int fragmentPos = url.IndexOf('#');
+            if (fragmentPos != -1)
+            {
+                url = url.Substring(0, fragmentPos);
+            }
 
             if (url.StartsWith(AppBaseUri, StringComparison.Ordinal)
                 && TryGetResponseContent(url, !hasFileExtension, out var statusCode, out var statusMessage,
